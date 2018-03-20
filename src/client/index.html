@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Application</title>
+</head>
+
+<body>
+    <div id="jogadores">
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Fruta</th>
+                <th>Cor</th>
+            </tr>
+        </thead>
+            <tr>
+                <td><input type="text" name="nome" id="nome"></td>
+                <td><input type="text" name="fruta" id="fruta"></td>
+                <td><input type="text" name="cor" id="cor"></td>
+            </tr>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <div>
+        <button id="stop">Stop</button>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+        
+        const $jogadores = document.querySelector('#jogadores');
+        const $nome = document.querySelector('#nome');
+        const $fruta = document.querySelector('#fruta');
+        const $cor = document.querySelector('#cor');
+        const $stop = document.querySelector('#stop');
+
+      
+        socket.on('server_timer', (data) => {
+            console.log(data);
+        });
+
+        socket.on('new_match', (data) => {
+            $nome.value = '';
+            $fruta.value = '';
+            $cor.value = '';
+
+            $jogadores.innerHTML = `Jogadores: ${data.players.join(', ')}`;
+
+            console.log(data);
+        });
+
+
+        $stop.addEventListener('click', function (e) {
+            socket.emit('stop');
+        });
+
+        function sendWords () {
+            var nome = $nome.value;
+            var fruta = $fruta.value;
+            var cor = $cor.value;
+
+            socket.emit('sending_words', {
+                nome,
+                fruta,
+                cor
+            });
+        }
+
+        $nome.addEventListener('input', sendWords);
+        $fruta.addEventListener('input', sendWords);
+        $cor.addEventListener('input', sendWords);
+    </script>
+</body>
+
+</html>

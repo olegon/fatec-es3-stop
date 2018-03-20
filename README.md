@@ -1,0 +1,19 @@
+# FATEC-SP - Engenharia de Software III - Jogo Stop
+
+Esse repositório destina-se aos arquivos do jogo _Stop_ a ser desenvolvido para a disciplina Engenharia de Software III da Faculdade de Tecnologia de São Paulo.
+
+## Organização do repositório
+
+- __src__: diretório com o código fonte do jogo
+- __src/client__: diretório com o código fonte do front-end
+- __src/server__: diretório com o código fonte do back-end
+
+## Integrantes
+
+- Alexis Diniz Trechau
+- Débora Izumi Kakazu
+- Leandro Gonçalves de Oliveira
+- Luigi Henrique Feitoza Silva
+- Paulo Fernandes
+- Pedro Bartoli de Oliveira
+- Samir El Hassan

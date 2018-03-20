@@ -8,6 +8,11 @@ Esse repositório destina-se aos arquivos do jogo _Stop_ a ser desenvolvido para
 - __src/client__: diretório com o código fonte do front-end
 - __src/server__: diretório com o código fonte do back-end
 
+## Tecnologias
+
+- node.js 8.x (Carbon LTS)
+- npm 5.x
+
 ## Integrantes
 
 - Alexis Diniz Trechau

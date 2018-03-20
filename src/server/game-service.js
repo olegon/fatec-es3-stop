@@ -11,7 +11,7 @@ function service (playerService, wordService) {
     let currentMatch = null;
     
     return {
-        initMatch (duration = 10000) {
+        initMatch (duration = 15000) {
             currentMatch = initMatch(playerService, wordService, duration);
         },
     }
@@ -20,6 +20,7 @@ function service (playerService, wordService) {
 function initMatch(playerService, wordService, duration) {    
     let timeLeft = duration;
     const players = playerService.getPlayers();
+    const playersWaiting = [];
     
     const wordsByUser = {
         
@@ -35,6 +36,29 @@ function initMatch(playerService, wordService, duration) {
     
     const choosenLetter = choice(AVAILABLE_LETTERS);
 
+    const playerConnectedEvent = playerService.onPlayerConnected(function (player) {
+        player.emit('current_match', {
+            letter: choosenLetter,
+            timeLeft: timeLeft
+        });
+
+        playersWaiting.push(player);
+    });
+
+    const playerDisconnectedEvent = playerService.onPlayerDisconnected(function (player) {
+        const playerIndex = players.indexOf(player);
+        if (playerIndex > -1) {
+            players.splice(playerIndex, 1);
+            return;
+        }
+    
+        const playerWaitingIndex = playersWaiting.indexOf(player);
+        if (playerWaitingIndex > -1) {
+            playersWaiting.splice(playerWaitingIndex, 1);
+            return;
+        }
+    });
+
     const timerInterval = setInterval(function () {
         timeLeft -= TIME_STEP_IN_MS;
 
@@ -44,9 +68,12 @@ function initMatch(playerService, wordService, duration) {
             encerrarPartida();
         }
         else {
-            players.forEach(socket => {
+            [...players, ...playersWaiting].forEach(socket => {
                 socket.emit('server_timer', {
-                    timeLeft: timeLeft
+                    timeLeft: timeLeft,
+                    letter: choosenLetter,
+                    players: players.map(playerSocket => playerSocket.id),
+                    playersWaiting: playersWaiting.map(playerSocket => playerSocket.id),
                 });
             });
         }
@@ -59,6 +86,8 @@ function initMatch(playerService, wordService, duration) {
         console.log(JSON.stringify(wordsByUser, null, 4));
         
         clearInterval(timerInterval);
+        playerConnectedEvent.clear();
+        playerDisconnectedEvent.clear();
 
         players.forEach(userSocket => {
             userSocket.removeAllListeners('stop');
@@ -74,6 +103,7 @@ function initMatch(playerService, wordService, duration) {
         playerSocket.emit('new_match', {
             letter: choosenLetter,
             players: players.map(playerSocket => playerSocket.id),
+            playersWaiting: playersWaiting.map(playerSocket => playerSocket.id),
         })
 
         playerSocket.on('stop', (data) => {

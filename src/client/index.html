@@ -9,7 +9,13 @@
 </head>
 
 <body>
+    <div id="letra">
+    </div>
+    
     <div id="jogadores">
+    </div>
+
+    <div id="jogadores-aguardando">
     </div>
 
     <table>
@@ -21,9 +27,9 @@
             </tr>
         </thead>
             <tr>
-                <td><input type="text" name="nome" id="nome"></td>
-                <td><input type="text" name="fruta" id="fruta"></td>
-                <td><input type="text" name="cor" id="cor"></td>
+                <td><input type="text" name="nome" id="nome" disabled></td>
+                <td><input type="text" name="fruta" id="fruta" disabled></td>
+                <td><input type="text" name="cor" id="cor" disabled></td>
             </tr>
         <tbody>
 
@@ -31,7 +37,7 @@
     </table>
 
     <div>
-        <button id="stop">Stop</button>
+        <button id="stop" disabled>Stop</button>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
@@ -39,6 +45,8 @@
         var socket = io();
         
         const $jogadores = document.querySelector('#jogadores');
+        const $jogadoresAguardando = document.querySelector('#jogadores-aguardando');
+        const $letra = document.querySelector('#letra');
         const $nome = document.querySelector('#nome');
         const $fruta = document.querySelector('#fruta');
         const $cor = document.querySelector('#cor');
@@ -46,25 +54,38 @@
 
       
         socket.on('server_timer', (data) => {
-            console.log(data);
+            console.log('server_timer', data);
+
+            $letra.innerHTML = `Letra ${data.letter}`;
+            $jogadores.innerHTML = `Jogadores: ${data.players.join(', ')}`;
+            $jogadoresAguardando.innerHTML = `Jogadores aguardando: ${data.playersWaiting.join(', ')}`;
         });
 
         socket.on('new_match', (data) => {
             $nome.value = '';
             $fruta.value = '';
             $cor.value = '';
+            $letra.innerHTML = `Letra ${data.letter}`;
 
-            $jogadores.innerHTML = `Jogadores: ${data.players.join(', ')}`;
+            $nome.disabled = false;
+            $fruta.disabled = false;
+            $cor.disabled = false;
+            $stop.disabled = false;
 
-            console.log(data);
+            console.log('new_match', data);
+        });
+
+        socket.on('current_match', (data) => {
+            $letra.innerHTML = `Letra ${data.letter}`;
+            console.log('current_match', data);
         });
 
 
-        $stop.addEventListener('click', function (e) {
+        $stop.addEventListener('click', (e) => {
             socket.emit('stop');
         });
 
-        function sendWords () {
+        const sendWords = () => {
             var nome = $nome.value;
             var fruta = $fruta.value;
             var cor = $cor.value;

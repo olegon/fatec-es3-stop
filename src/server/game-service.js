@@ -67,7 +67,7 @@ function initMatch(playerService, wordService, duration) {
 
         console.log('# Partida encerrada.');
 
-        initMatch(playerService, duration);
+        initMatch(playerService, wordService, duration);
     }
 
     players.forEach(playerSocket => {        

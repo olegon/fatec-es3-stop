@@ -8,7 +8,8 @@ const server = http.createServer(app);
 const io = socketIO(server);
 
 const playerService = require('./player-service')();
-const gameService = require('./game-service')(playerService);
+const wordService = require('./word-service')();
+const gameService = require('./game-service')(playerService, wordService);
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/index.html'));

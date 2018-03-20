@@ -7,17 +7,17 @@ function choice(array) {
     return array[Math.floor(Math.random() * array.length)];
 }
 
-function service (playerService) {
+function service (playerService, wordService) {
     let currentMatch = null;
     
     return {
         initMatch (duration = 10000) {
-            currentMatch = initMatch(playerService, duration);
+            currentMatch = initMatch(playerService, wordService, duration);
         },
     }
 }
 
-function initMatch(playerService, duration) {    
+function initMatch(playerService, wordService, duration) {    
     let timeLeft = duration;
     const players = playerService.getPlayers();
     

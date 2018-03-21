@@ -9,7 +9,7 @@ function service() {
     const players = [];
     const eventEmitter = new events.EventEmitter();
     
-    const instance = {
+    return {
         connect (player) {
             players.push(player);
 
@@ -17,7 +17,7 @@ function service() {
         },
         
         getPlayers () {
-            return [...players]
+            return [...players];
         },
         
         onPlayerConnected (listener) {
@@ -25,7 +25,7 @@ function service() {
             
             return {
                 clear () {
-                    return eventEmitter.removeListener(EVENT_NAME_PLAYER_CONNECTED, listener);
+                    eventEmitter.removeListener(EVENT_NAME_PLAYER_CONNECTED, listener);
                 }
             }
         },
@@ -35,7 +35,7 @@ function service() {
 
             return {
                 clear () {
-                    return eventEmitter.removeListener(EVENT_NAME_PLAYER_DISCONNECTED, listener);
+                    eventEmitter.removeListener(EVENT_NAME_PLAYER_DISCONNECTED, listener);
                 }
             }
         },
@@ -49,6 +49,4 @@ function service() {
             }
         },
     }
-
-    return instance;
 }

@@ -34,7 +34,8 @@ io.on('connection', (socket) => {
 });
 
 server.listen(process.env.PORT, function () {
-    console.log('Listening at *:8080');
+    console.log(`# listening at *:${process.env.PORT}`);
+    
     gameService.initMatch();
 });
 

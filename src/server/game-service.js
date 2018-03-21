@@ -1,6 +1,8 @@
 module.exports = service;
 
-const AVAILABLE_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+// const AVAILABLE_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+const AVAILABLE_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'X', 'Z'];
+
 const TIME_STEP_IN_MS = 1000;
 
 function choice(array) {
@@ -63,7 +65,7 @@ function initMatch(playerService, wordService, duration) {
     const timerInterval = setInterval(function () {
         timeLeft -= TIME_STEP_IN_MS;
 
-        console.log(`# Tempo restante da partida ${timeLeft}ms`);
+        console.log(`# match time left: ${timeLeft}ms`);
 
         if (timeLeft <= 0) {
             encerrarPartida();
@@ -82,9 +84,9 @@ function initMatch(playerService, wordService, duration) {
     }, TIME_STEP_IN_MS);
 
     function encerrarPartida() {
-        console.log(`# Encerrando partida ${choosenLetter}`);
+        console.log(`# closing match with letter ${choosenLetter}`);
 
-        console.log('# Palavras: ')
+        console.log('# words: ')
         console.log(JSON.stringify(wordsByUser, null, 4));
         
         clearInterval(timerInterval);
@@ -96,7 +98,7 @@ function initMatch(playerService, wordService, duration) {
             userSocket.removeAllListeners('sending_words');
         });
 
-        console.log('# Partida encerrada.');
+        console.log('# match closed');
 
         initMatch(playerService, wordService, duration);
     }
@@ -109,7 +111,7 @@ function initMatch(playerService, wordService, duration) {
         })
 
         playerSocket.on('stop', (data) => {
-            console.log(`# User ${playerSocket.id} asked for stop.`);
+            console.log(`# user ${playerSocket.id} asked for stop.`);
 
             encerrarPartida();
         });
@@ -117,7 +119,7 @@ function initMatch(playerService, wordService, duration) {
         playerSocket.on('sending_words', (words) => {
             const { nome, fruta, cor } = words;
 
-            console.log(`# User ${playerSocket.id} is sending words.`);
+            console.log(`# user ${playerSocket.id} is sending words.`);
             
             wordsByUser[playerSocket.id] = {
                 nome,
@@ -127,7 +129,7 @@ function initMatch(playerService, wordService, duration) {
         });
     });
     
-    console.log(`# Iniciando partida ${choosenLetter}`);
+    console.log(`# initializing match with letter ${choosenLetter}`);
 }
 
 

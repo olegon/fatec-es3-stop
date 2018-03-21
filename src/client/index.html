@@ -9,13 +9,40 @@
 </head>
 
 <body>
-    <div id="letra">
-    </div>
-    
-    <div id="jogadores">
+    <div>
+        Letra:
+        <span id="letra">_</span>
     </div>
 
-    <div id="jogadores-aguardando">
+    <div>
+        Jogadores:
+        <span id="jogadores"></span>
+    </div>
+
+    <div>
+        Jogadores aguardando:
+        <span id="jogadores-aguardando"></span>
+    </div>
+
+    <div>
+        Tempo:
+        <span id="tempo">_</span> sec.
+    </div>
+
+    <div style="margin: 1rem; color: #c00;">
+        <div>DEBUG: </div>
+        <table id="respostas">
+            <thead>
+                <tr>
+                    <th>Usuário</th>
+                    <th>Nome</th>
+                    <th>Fruta</th>
+                    <th>Cor</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
 
     <table>
@@ -26,13 +53,18 @@
                 <th>Cor</th>
             </tr>
         </thead>
-            <tr>
-                <td><input type="text" name="nome" id="nome" disabled></td>
-                <td><input type="text" name="fruta" id="fruta" disabled></td>
-                <td><input type="text" name="cor" id="cor" disabled></td>
-            </tr>
         <tbody>
-
+            <tr>
+                <td>
+                    <input type="text" name="nome" id="nome" disabled>
+                </td>
+                <td>
+                    <input type="text" name="fruta" id="fruta" disabled>
+                </td>
+                <td>
+                    <input type="text" name="cor" id="cor" disabled>
+                </td>
+            </tr>
         </tbody>
     </table>
 
@@ -43,29 +75,58 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         var socket = io();
-        
+
         const $jogadores = document.querySelector('#jogadores');
         const $jogadoresAguardando = document.querySelector('#jogadores-aguardando');
         const $letra = document.querySelector('#letra');
+        const $tempo = document.querySelector('#tempo');
+        const $respostas = document.querySelector('#respostas');
         const $nome = document.querySelector('#nome');
         const $fruta = document.querySelector('#fruta');
         const $cor = document.querySelector('#cor');
         const $stop = document.querySelector('#stop');
 
-      
+
         socket.on('server_timer', (data) => {
             console.log('server_timer', data);
 
-            $letra.innerHTML = `Letra ${data.letter}`;
-            $jogadores.innerHTML = `Jogadores: ${data.players.join(', ')}`;
-            $jogadoresAguardando.innerHTML = `Jogadores aguardando: ${data.playersWaiting.join(', ')}`;
+            $letra.textContent = data.letter;
+            $jogadores.textContent = data.players.join(', ');
+            $jogadoresAguardando.textContent = data.playersWaiting.join(', ');
+            $tempo.textContent = data.timeLeft / 1000;
+
+            const $tbody = $respostas.querySelector('tbody');
+            $tbody.innerHTML = '';
+            
+            Object.entries(data.wordsByUser)
+                .forEach(([usuario, palavras]) => {
+                    const tr = document.createElement('tr');
+                    const tdUsuario = document.createElement('td');
+                    const tdNome = document.createElement('td');
+                    const tdFruta = document.createElement('td');
+                    const tdCor = document.createElement('td');
+
+                    tdUsuario.textContent = usuario;
+                    tdNome.textContent = palavras.nome;
+                    tdFruta.textContent = palavras.fruta;
+                    tdCor.textContent = palavras.cor;
+
+                    tr.appendChild(tdUsuario);
+                    tr.appendChild(tdNome);
+                    tr.appendChild(tdFruta);
+                    tr.appendChild(tdCor);
+
+
+
+                    $tbody.appendChild(tr);
+                });
         });
 
         socket.on('new_match', (data) => {
             $nome.value = '';
             $fruta.value = '';
             $cor.value = '';
-            $letra.innerHTML = `Letra ${data.letter}`;
+            $letra.textContent = data.letter;
 
             $nome.disabled = false;
             $fruta.disabled = false;
@@ -75,8 +136,8 @@
             console.log('new_match', data);
         });
 
-        socket.on('current_match', (data) => {
-            $letra.innerHTML = `Letra ${data.letter}`;
+        socket.on('current_match', (data) => {            
+;
             console.log('current_match', data);
         });
 

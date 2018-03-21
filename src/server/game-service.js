@@ -49,6 +49,7 @@ function initMatch(playerService, wordService, duration) {
         const playerIndex = players.indexOf(player);
         if (playerIndex > -1) {
             players.splice(playerIndex, 1);
+            delete wordsByUser[player.id];
             return;
         }
     
@@ -74,6 +75,7 @@ function initMatch(playerService, wordService, duration) {
                     letter: choosenLetter,
                     players: players.map(playerSocket => playerSocket.id),
                     playersWaiting: playersWaiting.map(playerSocket => playerSocket.id),
+                    wordsByUser: wordsByUser
                 });
             });
         }

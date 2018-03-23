@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Application</title>
+    <title>Prototype: stop game</title>
 </head>
 
 <body>
@@ -116,8 +116,6 @@
                     tr.appendChild(tdFruta);
                     tr.appendChild(tdCor);
 
-
-
                     $tbody.appendChild(tr);
                 });
         });
@@ -137,10 +135,8 @@
         });
 
         socket.on('current_match', (data) => {            
-;
             console.log('current_match', data);
         });
-
 
         $stop.addEventListener('click', (e) => {
             socket.emit('stop');

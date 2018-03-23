@@ -1,4 +1,5 @@
 const events = require('events');
+const util = require('./util');
 
 module.exports = service;
 
@@ -21,23 +22,11 @@ function service() {
         },
         
         onPlayerConnected (listener) {
-            eventEmitter.addListener(EVENT_NAME_PLAYER_CONNECTED, listener);
-            
-            return {
-                clear () {
-                    eventEmitter.removeListener(EVENT_NAME_PLAYER_CONNECTED, listener);
-                }
-            }
+            return util.bindEvent(eventEmitter, EVENT_NAME_PLAYER_CONNECTED, listener);
         },
 
         onPlayerDisconnected (listener) {
-            eventEmitter.addListener(EVENT_NAME_PLAYER_DISCONNECTED, listener);
-
-            return {
-                clear () {
-                    eventEmitter.removeListener(EVENT_NAME_PLAYER_DISCONNECTED, listener);
-                }
-            }
+            return util.bindEvent(eventEmitter, EVENT_NAME_PLAYER_DISCONNECTED, listener);
         },
         
         disconnect (player) {

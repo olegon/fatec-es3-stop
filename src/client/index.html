@@ -91,8 +91,8 @@
             console.log('server_timer', data);
 
             $letra.textContent = data.letter;
-            $jogadores.textContent = data.players.join(', ');
-            $jogadoresAguardando.textContent = data.playersWaiting.join(', ');
+            $jogadores.textContent = data.currentPlayers.join(', ');
+            $jogadoresAguardando.textContent = data.waitingPlayers.join(', ');
             $tempo.textContent = data.timeLeft / 1000;
 
             const $tbody = $respostas.querySelector('tbody');

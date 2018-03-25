@@ -9,11 +9,12 @@ const io = socketIO(server);
 
 const playerService = require('./player-service')();
 const wordService = require('./word-service')();
-const gameService = require('./game-service')(playerService, wordService);
+const matchService = require('./match-service')(playerService, wordService);
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/index.html'));
 });
+
 
 io.on('connection', (socket) => {
     const { id } = socket;
@@ -36,8 +37,16 @@ io.on('connection', (socket) => {
 server.listen(process.env.PORT, function () {
     console.log(`# listening at *:${process.env.PORT}`);
     
-    gameService.initMatch();
+    gameLoop();
+    
+    // gameService.startMatch();
 });
+
+async function gameLoop() {
+    while (true) {
+        await matchService.startMatches(5);
+    }
+}
 
 
 

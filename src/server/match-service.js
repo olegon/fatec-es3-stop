@@ -15,7 +15,7 @@ function service (playerService, wordService) {
 async function startMatches(playerService, roundService, rounds) {
     let currentPlayers = playerService.getPlayers();
     let waitingPlayers = [];
-
+    
     const onPlayerConnectedEvent = playerService.onPlayerConnected(socket => {
         console.log(`# adding player ${socket.id} to waiting players`);
         waitingPlayers.push(socket);
@@ -45,7 +45,7 @@ async function startMatches(playerService, roundService, rounds) {
         currentPlayers = [...currentPlayers, ...waitingPlayers];
         waitingPlayers = [];
         
-        const result = await roundService.startRound(currentPlayers, waitingPlayers, 15000);
+        const result = await roundService.startRound(currentPlayers, waitingPlayers, 30000);
         
         console.log(result);
     }
@@ -54,10 +54,4 @@ async function startMatches(playerService, roundService, rounds) {
 
     onPlayerConnectedEvent.clear();
     onPlayerDisconnectedEvent.clear();
-}
-
-function startRound(players) {
-    return new Promise((res, rej) => {
-        setTimeout(res, 5000, { result: null });
-    });
 }

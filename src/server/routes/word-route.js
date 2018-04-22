@@ -7,6 +7,6 @@ const controller = require('../controllers/word-controller');
 router.get('/', controller.get);
 router.post('/', controller.post);
 router.put('/:id', controller.put);
-router.delete('/', controller.delete);
+router.delete('/:id', controller.delete);
 
 module.exports = router;

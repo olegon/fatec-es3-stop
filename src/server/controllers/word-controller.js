@@ -42,9 +42,16 @@ exports.put = (req, res, next) => {
     .catch(e => {
         res.status(400).send({ message: "Falha ao atualizar palavra", 
         data: e });                
-    });;
+    });
 }
 
 exports.delete = (req, res, next) => {
-    res.status(200).send(req.body);
+    Word.deleteOne({ _id: req.params.id })
+    .then(x => {
+        res.status(200).send({ message: "Palavra removida com sucesso!" });    
+    })
+    .catch(e => {
+        res.status(400).send({ message: "Falha ao remover palavra", 
+        data: e });                
+    });
 }

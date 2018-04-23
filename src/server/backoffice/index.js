@@ -24,11 +24,9 @@ module.exports = function (app, server) {
         saveUninitialized: false
     }));
 
-   
-
     backofficeRouter.get('/', (req, res) => {
         if (req.session.user == null) {
-            res.render('backoffice/login');
+            res.redirect('/backoffice/login');
         }
         else {
             res.render('backoffice/index');
@@ -47,7 +45,6 @@ module.exports = function (app, server) {
         }
     });
 
-    backofficeRouter.use('/login', require('./routes/login-route'));
     backofficeRouter.use('/category', require('./routes/category-route'));
     backofficeRouter.use('/word', require('./routes/word-route'));
 

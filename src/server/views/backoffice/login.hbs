@@ -8,20 +8,19 @@
                 {{ flashMessage }}
             </div>
         {{/if}}
-       
 
         <div>
             <form method="POST" action="/backoffice/login">
                 <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" name="username" class="form-control" id="username" placeholder="login do usuário">
+                    <label for="username">Usuário</label>
+                    <input type="text" name="username" class="form-control" id="username" placeholder="Digite o seu usuário">
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
-                        <input type="password" name="password" class="form-control" id="password" placeholder="senha">
+                    <label for="password">Senha</label>
+                        <input type="password" name="password" class="form-control" id="password" placeholder="Digite a sua senha">
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="form-control">Login</button>
+                    <button type="submit" class="form-control btn btn-primary">Login</button>
                 </div>
             </form>
         </div>

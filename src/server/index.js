@@ -5,6 +5,7 @@ const debug = require('debug')('node:server');
 const apiSetup = require('./api');
 const gameCoreSetup = require('./game-core');
 
+
 if (process.env.PORT == null) {
     throw new Error('Cannot find enviroment variable PORT');
 }
@@ -18,7 +19,6 @@ apiSetup(app, server);
 server.listen(process.env.PORT);
 server.on('error', onError);
 server.on('listening', onListening);
-
 
 function onError(error) {
     if(error.syscall !== 'listen'){

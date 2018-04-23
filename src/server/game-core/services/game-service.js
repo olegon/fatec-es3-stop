@@ -75,8 +75,8 @@ function initMatch(playerService, wordService, duration) {
                 socket.emit('server_timer', {
                     timeLeft: timeLeft,
                     letter: choosenLetter,
-                    players: players.map(playerSocket => playerSocket.id),
-                    playersWaiting: playersWaiting.map(playerSocket => playerSocket.id),
+                    currentPlayers: players.map(playerSocket => playerSocket.id),
+                    waitingPlayers: playersWaiting.map(playerSocket => playerSocket.id),
                     wordsByUser: wordsByUser
                 });
             });

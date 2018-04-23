@@ -30,6 +30,8 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 function onError(error) {
+    const port = process.env.PORT;
+
     if(error.syscall !== 'listen'){
         throw error;
     }

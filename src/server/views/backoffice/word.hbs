@@ -1,0 +1,85 @@
+<h2>
+    Cadastro de Palavras
+</h2>
+
+<h3>
+    Palavras Cadastradas
+</h3>
+<div>
+    <ul id="palavras-cadastradas">
+
+    </ul>
+</div>
+
+
+<h3>
+    Nova palavra
+</h3>
+<div>
+    <div class="row">
+        <div class="col-md-6">
+            <form id="nova-palavra" method="POST" action="/backoffice/login" >
+                <div class="form-group">
+                    <label for="palavra">Palavra</label>
+                    <input type="text" name="palavra" class="form-control" id="palavra" placeholder="palavra">
+                </div>
+                <div class="form-group">
+                    <label for="palavra">Categoria</label>
+                    <select name="categoria" class="form-control" id="categoria">
+                        <option value="">Selecione...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="form-control">Cadastrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const $palavras = $('#palavras-cadastradas');
+    const $novaPalavra = $('#nova-palavra');
+    const $categoria = $('#categoria');
+
+    function atualizarCategorias() {
+        $.get('/api/category')
+        .done(categorias => {
+            for (let categoria of categorias) {
+                $categoria.append(`<option value="${categoria.name}">${categoria.name}</li>`);
+            }
+        });
+    }
+
+    function atualizarPalavrasCadastradas() {
+         $.get('/api/words')
+        .done(palavras => {
+            $palavras.html('');
+
+            for (let palavra of palavras) {
+                $palavras.append(`<li>${palavra.name} (${palavra.category})</li>`);
+            }
+        });
+    }
+
+    $novaPalavra.on('submit', (e) => {
+        e.preventDefault();
+
+        const palavra = $('#palavra').val();
+        const categoria = $('#categoria').val();
+
+        $.post('/api/words', { name: palavra, category: categoria })
+        .done(() => {
+            $('#palavra').val('');
+            $('#categoria').val('');
+
+            atualizarPalavrasCadastradas();
+        })
+        .fail(err => {
+            alert('Erro ao cadastrar palavra');
+        });
+    });
+
+    $(atualizarPalavrasCadastradas)
+    $(atualizarCategorias);
+</script>

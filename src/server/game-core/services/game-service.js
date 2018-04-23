@@ -65,7 +65,7 @@ function initMatch(playerService, wordService, duration) {
     const timerInterval = setInterval(function () {
         timeLeft -= TIME_STEP_IN_MS;
 
-        console.log(`# match time left: ${timeLeft}ms`);
+        // console.log(`# match time left: ${timeLeft}ms`);
 
         if (timeLeft <= 0) {
             encerrarPartida();
@@ -84,10 +84,10 @@ function initMatch(playerService, wordService, duration) {
     }, TIME_STEP_IN_MS);
 
     function encerrarPartida() {
-        console.log(`# closing match with letter ${choosenLetter}`);
+        // console.log(`# closing match with letter ${choosenLetter}`);
 
-        console.log('# words: ')
-        console.log(JSON.stringify(wordsByUser, null, 4));
+        // console.log('# words: ')
+        // console.log(JSON.stringify(wordsByUser, null, 4));
         
         clearInterval(timerInterval);
         playerConnectedEvent.clear();
@@ -98,7 +98,7 @@ function initMatch(playerService, wordService, duration) {
             userSocket.removeAllListeners('sending_words');
         });
 
-        console.log('# match closed');
+        // console.log('# match closed');
 
         initMatch(playerService, wordService, duration);
     }
@@ -111,7 +111,7 @@ function initMatch(playerService, wordService, duration) {
         })
 
         playerSocket.on('stop', (data) => {
-            console.log(`# user ${playerSocket.id} asked for stop.`);
+            // console.log(`# user ${playerSocket.id} asked for stop.`);
 
             encerrarPartida();
         });
@@ -119,7 +119,7 @@ function initMatch(playerService, wordService, duration) {
         playerSocket.on('sending_words', (words) => {
             const { nome, fruta, cor } = words;
 
-            console.log(`# user ${playerSocket.id} is sending words.`);
+            // console.log(`# user ${playerSocket.id} is sending words.`);
             
             wordsByUser[playerSocket.id] = {
                 nome,
@@ -129,7 +129,7 @@ function initMatch(playerService, wordService, duration) {
         });
     });
     
-    console.log(`# initializing match with letter ${choosenLetter}`);
+    // console.log(`# initializing match with letter ${choosenLetter}`);
 }
 
 

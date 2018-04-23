@@ -6,7 +6,7 @@ const schema = new Schema({
         type: Number,
         required: true
     },
-    playersByMatch: {
+    maxPlayersByMatch: {
         type: Number,
         required: true
     },
@@ -17,4 +17,4 @@ const schema = new Schema({
     }]
 });
 
-module.exports = mongoose.model('Parameter', schema);
+module.exports = mongoose.model('GameParameters', schema);

@@ -2,11 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
-    category: {
-        type: String,
-        required: true,
-        trim: true
-    },
     name: {
         type: String,
         required: true,
@@ -14,7 +9,7 @@ const schema = new Schema({
         unique: true,
         index: true
     },
-    letter: {
+    category: {
         type: String,
         required: true,
         trim: true

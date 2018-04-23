@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Word = mongoose.model('Word');
 
-exports.get = (req, res, next) => {
+exports.get = (req, res) => {
     Word
         .find({ 
             active: true 
@@ -14,7 +14,7 @@ exports.get = (req, res, next) => {
         });
 }
 
-exports.post = (req, res, next) => {
+exports.post = (req, res) => {
     var word = new Word(req.body);
     word
         .save()
@@ -27,7 +27,7 @@ exports.post = (req, res, next) => {
         });
 }
 
-exports.put = (req, res, next) => {
+exports.put = (req, res) => {
     Word.findByIdAndUpdate(req.params.id, {
         $set: {
             name: req.body.name,
@@ -43,7 +43,7 @@ exports.put = (req, res, next) => {
     });
 }
 
-exports.delete = (req, res, next) => {
+exports.delete = (req, res) => {
     Word.deleteOne({ _id: req.params.id })
     .then(x => {
         res.status(200).send({ message: "Palavra removida com sucesso!" });    

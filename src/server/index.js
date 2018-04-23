@@ -1,10 +1,12 @@
 const http = require('http');
 const express = require('express');
+const hbs = require('express-handlebars');
 const debug = require('debug')('node:server');
+const mongoose = require('mongoose');
 
 const apiSetup = require('./api');
 const gameCoreSetup = require('./game-core');
-
+const backofficeSetup = require('./backoffice');
 
 if (process.env.PORT == null) {
     throw new Error('Cannot find enviroment variable PORT');
@@ -13,8 +15,15 @@ if (process.env.PORT == null) {
 const app = express();
 const server = http.createServer(app);
 
+// mongoose.connect('mongodb://nodestop:nodestop@ds153869.mlab.com:53869/nodestop');
+mongoose.connect('mongodb://localhost:27017/test');
+
+app.engine('hbs', hbs({ defaultLayout: 'main', extname: 'hbs' }));
+app.set('view engine', 'hbs');
+
 gameCoreSetup(app, server);
 apiSetup(app, server);
+backofficeSetup(app, server);
 
 server.listen(process.env.PORT);
 server.on('error', onError);

@@ -1,8 +1,10 @@
 const express = require('express');
+
+const controller = require('../controllers/game-parameters-controller');
+
 const router = express.Router();
-const controller = require('../controllers/category-controller');
 
 router.get('/', controller.get);
-router.post('/', controller.post);
+router.put('/', controller.put);
 
 module.exports = router;

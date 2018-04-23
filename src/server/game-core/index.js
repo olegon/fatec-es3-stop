@@ -1,3 +1,4 @@
+const path = require('path');
 const socketIO = require('socket.io');
 
 const playerService = require('./services/player-service')();
@@ -6,6 +7,10 @@ const gameService = require('./services/game-service')(playerService, wordServic
 
 module.exports = function (app, server) {
     const io = socketIO(server);
+
+    app.get('/', (req, res) => {
+        res.sendFile(path.join(__dirname, '../../client/index.html'));
+    });
 
     io.on('connection', (socket) => {
         const { id } = socket;

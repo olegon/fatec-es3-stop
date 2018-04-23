@@ -1,5 +1,5 @@
 const events = require('events');
-const util = require('./util');
+const util = require('../util');
 
 module.exports = service;
 

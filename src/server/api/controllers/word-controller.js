@@ -15,16 +15,27 @@ exports.get = (req, res) => {
 }
 
 exports.post = (req, res) => {
-    var word = new Word(req.body);
-    word
-        .save()
-        .then(x => {
-            res.status(201).send({ message: "Palavra cadastrada com sucesso!" });    
-        })
-        .catch(e => {
-            res.status(400).send({ message: "Falha ao cadastrar palavra", 
-            data: e });                
-        });
+    const { name, category } = req.body;
+    
+    Word
+    .findOne({ name, category })
+    .then(wordFromDb => {
+        if (wordFromDb == null) {
+            var word = new Word(req.body);
+
+            return word.save()
+        }
+        else {
+            throw new Error('A palavra já está cadastrada no banco de dados.')    ;
+        }
+    })
+    .then(x => {
+        res.status(201).send({ message: "Palavra cadastrada com sucesso!" });    
+    })
+    .catch(e => {
+        res.status(400).send({ message: "Falha ao cadastrar palavra", 
+        data: e });                
+    });
 }
 
 exports.put = (req, res) => {

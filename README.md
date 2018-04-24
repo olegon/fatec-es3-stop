@@ -12,6 +12,7 @@ Esse repositório destina-se aos arquivos do jogo _Stop_ a ser desenvolvido para
 
 - node.js 8.x (Carbon LTS)
 - npm 5.x
+- mongo 3.6.x
 
 ## Integrantes
 

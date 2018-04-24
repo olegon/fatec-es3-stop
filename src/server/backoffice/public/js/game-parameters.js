@@ -25,7 +25,7 @@
             $availableLetters.html('');
 
             allLetters.forEach(letter => {
-                const $button = $(`<button class="btn btn-danger st-btn-letter" title="Letra indisponível">${letter}</button>`);
+                const $button = $(`<span class="btn btn-danger st-btn-letter" title="Letra indisponível">${letter}</span>`);
 
                 $button.data('letter', letter);
 
@@ -37,8 +37,6 @@
                 $button.prop('title', $button.hasClass('btn-success') ? 'Letra disponível' : 'Letra indisponível');
 
                 $button.on('click', (e) => {
-                    e.preventDefault();
-
                     $button.toggleClass('btn-danger');
                     $button.toggleClass('btn-success');
 
@@ -60,7 +58,7 @@
         const roundDuration = parseInt($roundDuration.val()) || 1;
         const maxPlayersByMatch = parseInt($maxPlayersByMatch.val()) || 1;
         const roundsByMatch = parseInt($roundsByMatch.val()) || 1;
-        const availableLetters = [...$availableLetters.find('button')].filter(btn => $(btn).hasClass('btn-success')).map(btn => $(btn).data('letter'));
+        const availableLetters = [...$availableLetters.find('.st-btn-letter')].filter(btn => $(btn).hasClass('btn-success')).map(btn => $(btn).data('letter'));
 
         $.ajax({
             method: 'PUT',

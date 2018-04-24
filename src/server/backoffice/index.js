@@ -29,7 +29,7 @@ module.exports = function (app, server) {
             res.redirect('/backoffice/login');
         }
         else {
-            res.render('backoffice/index');
+            res.render('backoffice/index', { title: 'Backoffice' });
         }
     });
 

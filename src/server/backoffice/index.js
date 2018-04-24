@@ -11,13 +11,13 @@ const models = require('./models');
 module.exports = function (app, server) {
     const backofficeRouter = express.Router();
 
-    backofficeRouter.use(morgan('dev'));
+    backofficeRouter.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length]'));
 
     backofficeRouter.use('/public', express.static(path.join(__dirname, 'public'))); 
     
     backofficeRouter.use(flash());
     backofficeRouter.use(bodyParser.json());
-    backofficeRouter.use(bodyParser.urlencoded());
+    backofficeRouter.use(bodyParser.urlencoded({ extended: false }));
     backofficeRouter.use(session({
         secret: 'SESSION-SECRET',
         resave: false,
@@ -40,17 +40,18 @@ module.exports = function (app, server) {
     });
 
 
-    backofficeRouter.use((req, res, done) => {
-        if (req.session.user == null) {
-            res.redirect('/backoffice/login');
-        }
-        else {
-            done();
-        }
-    });
+    // backofficeRouter.use((req, res, next) => {
+    //     if (req.session.user == null) {
+    //         res.redirect('/backoffice/login');
+    //     }
+    //     else {
+    //         next();
+    //     }
+    // });
     
     backofficeRouter.use('/categories', require('./routes/categories-route'));
     backofficeRouter.use('/words', require('./routes/words-route'));
+    backofficeRouter.use('/game-parameters', require('./routes/game-parameters-route'));
 
     app.use('/backoffice', backofficeRouter);
 };

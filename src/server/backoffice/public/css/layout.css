@@ -2,9 +2,6 @@ body {
     padding-top: 60px;
 }
 
-.st-btn-removable {
-    margin: 0.25em;
-}
 
 .st-loading {
     background-image: url('/backoffice/public/loading.svg');
@@ -13,3 +10,12 @@ body {
     min-height: 80px;
     margin: 1rem 0;
 }
+
+.st-btn-removable {
+    margin: 0.25em;
+}
+
+.st-btn-letter {
+    margin: 0.25em;
+}
+

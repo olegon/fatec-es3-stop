@@ -1,0 +1,50 @@
+<div class="container">
+    <div class="row">
+        <div class="page-header">
+            <h1>Cadastro de Parâmetros do Jogo</h1>
+        </div>
+    </div>
+
+    <div class="row">
+         <div class="panel panel-default">
+            <div class="panel-heading">Alterar Parâmetros</div>
+            <div class="panel-body">
+                <div id="parametros-loading" class="st-loading"></div>
+                <div class="col-md-6">
+                    <form id="parametros" method="POST" action="/backoffice/login" autocomplete="off" style="display: none;">
+                        <div class="form-group">
+                            <label for="roundDuration">Duração do round (segundos)</label>
+                            <input type="number" min="1" name="roundDuration" class="form-control" 
+                            id="roundDuration" required>
+                        </div>
+
+                         <div class="form-group">
+                            <label for="maxPlayersByMatch">Quantidade máxima de jogadores</label>
+                            <input type="number" min="1" name="maxPlayersByMatch" class="form-control" 
+                            id="maxPlayersByMatch" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="roundsByMatch">Rounds por partida</label>
+                            <input type="number" min="1" name="roundsByMatch" class="form-control" 
+                            id="roundsByMatch" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="availableLetters">Letras disponíveis</label>
+                            <div id="availableLetters">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Atualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/backoffice/public/js/game-parameters.js"></script>

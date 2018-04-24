@@ -1,0 +1,44 @@
+<div class="container">
+    <div class="row">
+        <div class="page-header">
+            <h1>Cadastro de Palavras</h1>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">Cadastrar Palavra</div>
+            <div class="panel-body">
+                <div class="col-md-6">
+                    <form id="nova-palavra" method="POST" action="/backoffice/login" autocomplete="off">
+                        <div class="form-group">
+                            <label for="palavra">Categoria</label>
+                            <select name="categoria" class="form-control" id="categoria" required>
+                                <option value="">Selecione...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="palavra">Palavra</label>
+                            <input type="text" name="palavra" class="form-control" id="palavra" placeholder="Digite a palavra a ser cadastrada" required>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">Palavras Cadastradas</div>
+            <div class="panel-body">
+                <div id="palavras-cadastradas">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/backoffice/public/js/words.js"></script>

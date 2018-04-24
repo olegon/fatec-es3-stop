@@ -10,7 +10,8 @@ router.get('/', (req, res) => {
     else {
         res.render('backoffice/login', { 
             title: 'Login',
-            flashMessage: req.flash('login-error')
+            flashMessage: req.flash('login-error'),
+            notAuthenticated: true
         });
     }
 

@@ -34,6 +34,10 @@ module.exports = function (app, server) {
     });
 
     backofficeRouter.use('/login', require('./routes/login-route'));
+    backofficeRouter.get('/logout', (req, res) => {
+        delete req.session.user;
+        res.redirect('/backoffice');
+    });
 
 
     backofficeRouter.use((req, res, done) => {
@@ -44,9 +48,9 @@ module.exports = function (app, server) {
             done();
         }
     });
-
-    backofficeRouter.use('/category', require('./routes/category-route'));
-    backofficeRouter.use('/word', require('./routes/word-route'));
+    
+    backofficeRouter.use('/categories', require('./routes/categories-route'));
+    backofficeRouter.use('/words', require('./routes/words-route'));
 
     app.use('/backoffice', backofficeRouter);
 };

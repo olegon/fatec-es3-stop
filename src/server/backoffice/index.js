@@ -39,15 +39,14 @@ module.exports = function (app, server) {
         res.redirect('/backoffice');
     });
 
-
-    // backofficeRouter.use((req, res, next) => {
-    //     if (req.session.user == null) {
-    //         res.redirect('/backoffice/login');
-    //     }
-    //     else {
-    //         next();
-    //     }
-    // });
+    backofficeRouter.use((req, res, next) => {
+        if (req.session.user == null) {
+            res.redirect('/backoffice/login');
+        }
+        else {
+            next();
+        }
+    });
     
     backofficeRouter.use('/categories', require('./routes/categories-route'));
     backofficeRouter.use('/words', require('./routes/words-route'));

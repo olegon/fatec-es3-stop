@@ -1,0 +1,49 @@
+<div class="container">
+    <div class="row">
+        <div class="page-header">
+            <h1>Cadastro de Administradores</h1>
+        </div>
+    </div>
+
+    <div class="row">
+         <div class="panel panel-default">
+            <div class="panel-heading">Cadastrar Administrador</div>
+            <div class="panel-body">
+                <div class="col-md-6">
+                    <form id="novo-administrador" method="POST" action="/backoffice/login" autocomplete="off">
+                        <div class="form-group">
+                            <label for="username">Usuário</label>
+                            <input type="text" name="username" class="form-control" id="username" placeholder="Digite o seu usuário a ser cadastrado" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Senha</label>
+                            <input type="password" name="password" class="form-control" id="password" placeholder="Digite a sua senha a ser cadastrada" required>
+                        </div>
+
+                         <div class="form-group">
+                            <label for="password-confirmation">Confirmar da Senha</label>
+                            <input type="password" name="password-confirmation" class="form-control" id="password-confirmation" placeholder="Digite a sua senha a ser cadastrada" required>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">Administradores Cadastrados</div>
+            <div class="panel-body">
+                <div id="administradores-cadastrados">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/backoffice/public/js/backoffice-accounts.js"></script>

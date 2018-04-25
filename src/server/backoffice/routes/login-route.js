@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const Account = mongoose.model('Account');
+const BackofficeAccount = mongoose.model('BackofficeAccount');
+const BackofficeAccountService = require('../../services/backoffice-account-service')(BackofficeAccount);
 
 router.get('/', (req, res) => {
     if (req.session.user) {
@@ -14,31 +15,32 @@ router.get('/', (req, res) => {
             notAuthenticated: true
         });
     }
-
-    
 });
 
 router.post('/', async (req, res, done) => {
-    const { username, password } = req.body;
+    try {
+        const { username, password } = req.body;
 
-    const user = await Account.findOne({ username });
+        const account = await BackofficeAccountService.getAccountByUsernameAndPassword(username, password);
 
-    if (user == null) {
-        req.flash('login-error', 'Usuário não encontrado');
-        res.redirect('/backoffice/login');
-        return done();
+        if (account == null) {
+            req.flash('login-error', 'Usuário ou senha inválidos.');
+            res.redirect('/backoffice/login');
+        }
+        else {
+            req.session.user = account;
+            res.redirect('/backoffice');
+        
+        }
+
+        done();
     }
+    catch (err) {
+        console.error(err);
 
-    if (user.password != password) {
-        req.flash('login-error', 'Senha inválida');
+        req.flash('login-error', 'Serviço indisponível.');
         res.redirect('/backoffice/login');
-        return done();
     }
-
-    req.session.user = user;
-    res.redirect('/backoffice');
-
-    done();
 });
 
 module.exports = router;

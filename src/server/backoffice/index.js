@@ -5,7 +5,6 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const flash = require('express-flash');
 const morgan = require('morgan');
-const models = require('./models');
 
 
 module.exports = function (app, server) {
@@ -51,6 +50,7 @@ module.exports = function (app, server) {
     backofficeRouter.use('/categories', require('./routes/categories-route'));
     backofficeRouter.use('/words', require('./routes/words-route'));
     backofficeRouter.use('/game-parameters', require('./routes/game-parameters-route'));
+    backofficeRouter.use('/backoffice-accounts', require('./routes/backoffice-accounts-route'));
 
     app.use('/backoffice', backofficeRouter);
 };

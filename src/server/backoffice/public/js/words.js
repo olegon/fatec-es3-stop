@@ -37,7 +37,7 @@
                 $palavras.html('');
 
                 for (let palavra of palavras) {
-                    const $button = $(`<button class="btn btn-danger st-btn-removable" title="Clique para remover."></button class="btn btn-danger st-btn-removable">`);
+                    const $button = $(`<button class="btn btn-danger st-btn-interactive " title="Clique para remover."></button class="btn btn-danger st-btn-interactive ">`);
 
                     $button.text(`${palavra.normalized_name} (${palavra.category.name})`);
 

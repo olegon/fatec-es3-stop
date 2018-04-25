@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const Account = new Schema({
+const schema = new Schema({
     username: {
         type: String,
         required: true,
@@ -14,4 +14,4 @@ const Account = new Schema({
     },
 });
 
-module.exports = mongoose.model('Account', Account);
+module.exports = mongoose.model('BackofficeAccount', schema);

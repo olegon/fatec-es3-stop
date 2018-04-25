@@ -17,6 +17,7 @@ module.exports = function(app, server) {
     apiRouter.use('/words', require('./routes/word-route'));
     apiRouter.use('/category', require('./routes/category-route'));
     apiRouter.use('/game-parameters', require('./routes/game-parameters-route'));
+    apiRouter.use('/backoffice-accounts', require('./routes/backoffice-account-route'));
 
     app.use('/api', apiRouter);
 }

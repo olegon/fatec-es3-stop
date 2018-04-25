@@ -2,6 +2,23 @@
     const $palavras = $('#palavras-cadastradas');
     const $novaPalavra = $('#nova-palavra');
     const $categoria = $('#categoria');
+    const $palavra = $('#palavra');
+    const $palavraNormalizada = $('#palavra-normalizada');
+
+    function normalizeWord (word) {
+        return word
+        .toLowerCase()
+        .replace(/[áàãâä]/g, 'a')
+        .replace(/[éèẽêë]/g, 'e')
+        .replace(/[íìĩîï]/g, 'i')
+        .replace(/[óòõôö]/g, 'o')
+        .replace(/[úùũûü]/g, 'u')
+        .replace(/ç/g, 'c')
+        .replace(/[^\-\ a-z]/g, '')
+        .replace(/-{2,}/g, '-')
+        .replace(/\ {2,}/g, ' ')
+        .trim();
+    }
 
     function atualizarCategorias() {
         $.get('/api/category')
@@ -22,7 +39,7 @@
                 for (let palavra of palavras) {
                     const $button = $(`<button class="btn btn-danger st-btn-removable" title="Clique para remover."></button class="btn btn-danger st-btn-removable">`);
 
-                    $button.text(`${palavra.name} (${palavra.category.name})`);
+                    $button.text(`${palavra.normalized_name} (${palavra.category.name})`);
 
                     $button.on('click', function () {
                         $.ajax({
@@ -39,15 +56,22 @@
             });
     }
 
+    $palavra.on('input', (e) => {
+        const palavra = $palavra.val();
+        const palavraNormalizada = normalizeWord(palavra);
+        $palavraNormalizada.val(`"${palavraNormalizada}"`);
+    });
+
     $novaPalavra.on('submit', (e) => {
         e.preventDefault();
 
-        const palavra = $('#palavra').val();
-        const categoria = $('#categoria').val();
+        const palavra = $palavra.val();
+        const categoria = $categoria.val();
 
         $.post('/api/words', { name: palavra, category: categoria })
             .done(() => {
-                $('#palavra').val('');
+                $palavra.val('');
+                $palavraNormalizada.val('');
 
                 atualizarPalavrasCadastradas();
             })

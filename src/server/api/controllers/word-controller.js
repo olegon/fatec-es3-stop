@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Word = mongoose.model('Word');
+const WordService = require('../../services/word-service')(Word);
 
 exports.get = (req, res) => {
     Word
@@ -11,35 +12,20 @@ exports.get = (req, res) => {
         res.status(200).send(data);    
     })
     .catch(e => {
-        res.status(400).send(e);                
+        res.status(500).send(e);                
     });
 }
 
-exports.post = (req, res) => {
-    // const { name, category } = req.body;
-    
-    // Word
-    // .findOne({ name, category })
-    // .then(wordFromDb => {
-    //     if (wordFromDb == null) {
-    //         var word = 
-
-    //         return word.save()
-    //     }
-    //     else {
-    //         throw new Error('A palavra já está cadastrada no banco de dados.')    ;
-    //     }
-    // })
-
-    new Word(req.body)
-    .save()
-    .then(() => {
-        res.status(200).send({ message: "Palavra cadastrada com sucesso!" });    
-    })
-    .catch(e => {
-        res.status(400).send({ message: "Falha ao cadastrar palavra", 
-        data: e });                
-    });
+exports.post = async (req, res, next) => {
+    try {
+        const savedWord = await WordService.addWord(req.body);
+        res.status(200).json(savedWord);
+        next();
+    }
+    catch (err) {
+        res.status(500).json(err);
+        next(err);
+    }
 }
 
 exports.put = (req, res) => {
@@ -53,7 +39,7 @@ exports.put = (req, res) => {
         res.status(200).send({ message: "Palavra atualizada com sucesso!" });    
     })
     .catch(e => {
-        res.status(400).send({ message: "Falha ao atualizar palavra", 
+        res.status(500).send({ message: "Falha ao atualizar palavra", 
         data: e });                
     });
 }
@@ -64,7 +50,7 @@ exports.delete = (req, res) => {
         res.status(200).send({ message: "Palavra removida com sucesso!" });    
     })
     .catch(e => {
-        res.status(400).send({ message: "Falha ao remover palavra", 
+        res.status(500).send({ message: "Falha ao remover palavra", 
         data: e });                
     });
 }

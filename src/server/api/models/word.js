@@ -6,7 +6,11 @@ const schema = new Schema({
         type: String,
         required: true,
         trim: true,
-        index: true
+    },
+    normalized_name: {
+        type: String,
+        required: true,
+        trim: true
     },
     category: {
         type: Schema.Types.ObjectId,
@@ -17,9 +21,9 @@ const schema = new Schema({
         type: Boolean,
         required: true,
         default: true
-    }
+    },
 });
 
-schema.index({ name: 1,  category: 1 }, { unique: true });
+schema.index({ normalized_name: 1,  category: 1 }, { unique: true });
 
 module.exports = mongoose.model('Word', schema);

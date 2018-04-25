@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Category = mongoose.model('Category');
+const Word = mongoose.model('Word');
 
 exports.get = (req, res) => {
     Category
@@ -8,7 +9,7 @@ exports.get = (req, res) => {
             res.status(200).send(data);    
         })
         .catch(e => {
-            res.status(400).send(e);                
+            res.status(500).send(e);                
         });
 }
 
@@ -28,14 +29,18 @@ exports.post = (req, res) => {
 
 exports.delete = (req, res) => {
     const { id } = req.params;
-    
-    Category
+
+    Word
+    .deleteMany({ category: id })
+    .then(() =>
+        Category
         .deleteMany({ _id: id })
-        .then(() => {
-            res.status(200).send({ message: "Categoria removida com sucesso" });    
-        })
-        .catch(err => {
-            res.status(500).send({ message: "Falha ao remover categoria.", 
-            data: err });                
-        });
+    )
+    .then(() => {
+        res.status(200).send({ message: "Categoria removida com sucesso" });    
+    })
+    .catch(err => {
+        res.status(500).send({ message: "Falha ao remover categoria.", 
+        data: err });                
+    });
 }

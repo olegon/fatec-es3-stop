@@ -13,12 +13,7 @@ const schema = new Schema({
     roundsByMatch: {
         type: Number,
         required: true
-    },
-    availableLetters: [{
-        type: String,
-        required: true,
-        trim: true
-    }]
+    }
 });
 
 module.exports = mongoose.model('GameParameters', schema);

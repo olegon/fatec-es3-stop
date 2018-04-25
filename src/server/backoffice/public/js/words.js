@@ -7,7 +7,7 @@
         $.get('/api/category')
             .done(categorias => {
                 for (let categoria of categorias) {
-                    $categoria.append(`<option value="${categoria.name}">${categoria.name}</li>`);
+                    $categoria.append(`<option value="${categoria._id}">${categoria.name}</li>`);
                 }
             });
     }
@@ -20,7 +20,9 @@
                 $palavras.html('');
 
                 for (let palavra of palavras) {
-                    const $button = $(`<button class="btn btn-danger st-btn-removable" title="Clique para remover.">${palavra.name} (${palavra.category})</button class="btn btn-danger st-btn-removable">`);
+                    const $button = $(`<button class="btn btn-danger st-btn-removable" title="Clique para remover."></button class="btn btn-danger st-btn-removable">`);
+
+                    $button.text(`${palavra.name} (${palavra.category.name})`);
 
                     $button.on('click', function () {
                         $.ajax({

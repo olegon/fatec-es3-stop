@@ -9,7 +9,9 @@ function atualizarCategoriasCadastradas() {
             $categorias.html('');
 
             for (let categoria of categorias) {
-                const $button = $(`<button class="btn btn-danger st-btn-removable" title="Clique para remover.">${categoria.name}</button class="btn btn-danger st-btn-removable">`);
+                const $button = $(`<button class="btn btn-danger st-btn-removable" title="Clique para remover."></button class="btn btn-danger st-btn-removable">`);
+
+                $button.text(categoria.name);
 
                 $button.on('click', function () {
                     $.ajax({

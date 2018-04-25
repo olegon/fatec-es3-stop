@@ -3,34 +3,38 @@ const Word = mongoose.model('Word');
 
 exports.get = (req, res) => {
     Word
-        .find({ 
-            active: true 
-        }, 'name letter category')
-        .then(data => {
-            res.status(200).send(data);    
-        })
-        .catch(e => {
-            res.status(400).send(e);                
-        });
+    .find({ 
+        active: true 
+    })
+    .populate('category')
+    .then(data => {
+        res.status(200).send(data);    
+    })
+    .catch(e => {
+        res.status(400).send(e);                
+    });
 }
 
 exports.post = (req, res) => {
-    const { name, category } = req.body;
+    // const { name, category } = req.body;
     
-    Word
-    .findOne({ name, category })
-    .then(wordFromDb => {
-        if (wordFromDb == null) {
-            var word = new Word(req.body);
+    // Word
+    // .findOne({ name, category })
+    // .then(wordFromDb => {
+    //     if (wordFromDb == null) {
+    //         var word = 
 
-            return word.save()
-        }
-        else {
-            throw new Error('A palavra já está cadastrada no banco de dados.')    ;
-        }
-    })
-    .then(x => {
-        res.status(201).send({ message: "Palavra cadastrada com sucesso!" });    
+    //         return word.save()
+    //     }
+    //     else {
+    //         throw new Error('A palavra já está cadastrada no banco de dados.')    ;
+    //     }
+    // })
+
+    new Word(req.body)
+    .save()
+    .then(() => {
+        res.status(200).send({ message: "Palavra cadastrada com sucesso!" });    
     })
     .catch(e => {
         res.status(400).send({ message: "Falha ao cadastrar palavra", 

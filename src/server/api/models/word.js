@@ -9,9 +9,9 @@ const schema = new Schema({
         index: true
     },
     category: {
-        type: String,
+        type: Schema.Types.ObjectId,
         required: true,
-        trim: true
+        ref: 'Category'
     },
     active: {
         type: Boolean,
@@ -19,5 +19,7 @@ const schema = new Schema({
         default: true
     }
 });
+
+schema.index({ name: 1,  category: 1 }, { unique: true });
 
 module.exports = mongoose.model('Word', schema);

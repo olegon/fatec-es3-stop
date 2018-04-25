@@ -19,7 +19,7 @@ Esse repositório destina-se aos arquivos do jogo _Stop_ a ser desenvolvido para
 - Alexis Diniz Trechau
 - Débora Izumi Kakazu
 - Leandro Gonçalves de Oliveira
-- Luigi Henrique Feitoza Silva
-- Paulo Fernandes
-- Pedro Bartoli de Oliveira
+- Luigi Henrique Feitoza Silva (@luigihenrick)
+- Paulo Fernandes (@victjar)
+- Pedro Bartoli de Oliveira (@pedrobartoli)
 - Samir El Hassan

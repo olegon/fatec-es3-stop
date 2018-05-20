@@ -1,0 +1,29 @@
+body{
+    background-color: #b7d2ff;
+}
+
+.header{
+    background: url("../img/main-top.png.xhtml");
+    height: 65px;
+}
+
+.content{
+    background: url("../img/main-bg.png.xhtml") repeat;
+    padding: 10%;
+}
+
+.footer{
+    background: url("../img/main-footer.png.xhtml");
+    height: 67px;
+}
+
+.title {
+    font-family: 'Pacifico';
+    font-size: 3em;
+    color: #3280ff;
+}
+
+.card {
+    margin: 30px;
+    text-align: left;
+}

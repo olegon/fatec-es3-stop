@@ -1,7 +1,7 @@
 {
   "name": "fatec-es3-stop-server",
   "private": true,
-  "version": "0.0.2",
+  "version": "0.0.5",
   "description": "Jogo Stop para do trabalho de Engenharia de Software III da FATEC-SP.",
   "main": "index.js",
   "scripts": {

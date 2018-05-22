@@ -6,7 +6,6 @@ const socketIO = require('socket.io');
 const playerService = require('./services/player-service')();
 const wordService = require('./services/word-service')();
 const gameService = require('./services/game-service')(playerService, wordService);
-// const pageService = require('./services/page-service');
 
 module.exports = function (app, server) {
     const io = socketIO(server);
@@ -25,7 +24,9 @@ module.exports = function (app, server) {
         res.sendFile(path.join(__dirname, '../../client/rooms.html'));
     });
 
-    app.get('/game', (req, res) => {
+    app.get('/game/:roomId', (req, res) => {
+        console.log(req.params);
+        
         res.sendFile(path.join(__dirname, '../../client/game.html'));
     });
 

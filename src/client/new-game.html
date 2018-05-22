@@ -19,29 +19,68 @@
             <h5 class="card-header">Selecionar Categorias</h5>
             <div class="card-body">
                 <label>Nome da sala:</label>
-                <input type="text" class="form-control">
+                <input id="room-name" type="text" class="form-control">
                 <label>Categorias:</label>
-                <select class="multiple-select form-control" name="categories[]" multiple="multiple">
-                    <option value="Nome">Nome</option>
-                    <option value="Fruta">Fruta</option>
-                    <option value="CEP">CEP</option>
-                    <option value="Animal">Animal</option>
-                    <option value="Objeto">Objeto</option>
+                <select class="multiple-select form-control" name="categories" multiple="multiple">
                 </select>
-                <a style="margin-top: 10px;" class="btn btn-success" href="/new-game">Criar sala</a>
+                <a id="create-room" style="margin-top: 10px;" class="btn btn-success" href="/new-game">Criar sala</a>
             </div>
         </div>
         <a type="button" class="btn btn-primary btn-lg" href="/">Voltar</a>                
     </div>
     <div class="footer"></div>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
     <script>
-    $(document).ready(function() {
-        $('.multiple-select').select2();
-    });
+        $(document).ready(function() {
+            const $send = $('#create-room');
+            const $roomName = $('#room-name');
+            const $select = $('.multiple-select');
+
+            $.getJSON('/api/category')
+            .done(function (categories) {
+                categories.forEach(function (category) {
+                    const $template = $('<option value=""></option>');
+
+                    $template.prop('value', category._id);
+                    $template.text(category.name);
+
+                    $select.append($template);
+                });
+
+                $select.select2();
+            });
+
+            $send.on('click', function (e) {
+                e.preventDefault();
+
+                const name = $roomName.val();
+                const categories = $select.val();
+
+                if (name.trim() === '') {
+                    return alert('Nome é obrigatório.');
+                }
+                else if (categories.length === 0) {
+                    return alert('Selecione pelo menos uma categoria.');
+                }
+
+                $.ajax({
+                    method: 'POST',
+                    url: '/api/rooms',
+                    contentType: 'application/json',
+                    data:  JSON.stringify({
+                        name: $roomName.val(),
+                        categories: $select.val()
+                    })
+                })
+                .done(function (room) {
+                    location.href = `/game/${room._id}`;
+                });
+            });
+           
+        });
     </script>
 </body>
 </html>

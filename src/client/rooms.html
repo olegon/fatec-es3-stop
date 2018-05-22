@@ -14,41 +14,50 @@
     <div class="header"></div>
     <div class="content text-center">
         <h2 class="title">Stop Online</h2>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card">
-                    <h5 class="card-header">Sala 1</h5>
-                    <div class="card-body">
-                      <p class="card-text">Categorias: Nome, Animal, CEP.</p>
-                      <a href="/game" class="btn btn-success">Entrar</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <h5 class="card-header">Sala 2</h5>
-                    <div class="card-body">
-                      <p class="card-text">Categorias: Nome, Fruta, CEP.</p>
-                      <a href="/game" class="btn btn-success">Entrar</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <h5 class="card-header">Sala 3</h5>
-                    <div class="card-body">
-                      <p class="card-text">Categorias: Nome, Cor, Fruta.</p>
-                      <a href="/game" class="btn btn-success">Entrar</a>
-                    </div>
-                </div>
-            </div>
+        <div id="server-rooms" class="row">
+            
         </div>
         <a type="button" class="btn btn-primary btn-lg" href="/">Voltar</a>        
+        <a type="button" class="btn btn-primary btn-lg" href="/new-game">Criar Nova Sala</a>        
     </div>
     <div class="footer"></div>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+    <script>
+            function createTemplate() {
+                return $(`<div class="col-md-4">
+                            <div class="card">
+                                <h5 class="card-header">Sala 1</h5>
+                                <div class="card-body">
+                                    <p class="card-text">Categorias: Nome, Animal, CEP.</p>
+                                    <a href="/game/sala-1" class="btn btn-success">Entrar</a>
+                                </div>
+                            </div>
+                        </div>`);
+            }
+            $(function () {
+                const $roomsContainer  = $('#server-rooms');
+                $.getJSON('/api/rooms')
+                .done(function (rooms) {
+                    rooms.forEach(function (room) {
+                        var $roomTemplate = createTemplate();
+
+                        const categories = room.categories.map(category => category.name);
+
+                        $roomTemplate.find('.card-header').text(room.name);
+                        $roomTemplate.find('.card-text').text('Categorias: ' + categories.join(', '));
+                        $roomTemplate.find('a.btn-success').prop('href', `/game/${room._id}`);
+
+                        $roomsContainer.append($roomTemplate);
+                    });
+                });
+            });
+        </script>
 </body>
 </html>

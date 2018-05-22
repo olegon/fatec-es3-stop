@@ -2,7 +2,6 @@ const path = require('path');
 const express = require('express');
 const socketIO = require('socket.io');
 
-// const roomService = require('./services/room-service');
 const playerService = require('./services/player-service')();
 const wordService = require('./services/word-service')();
 const gameService = require('./services/game-service')(playerService, wordService);
@@ -26,7 +25,7 @@ module.exports = function (app, server) {
 
     app.get('/game/:roomId', (req, res) => {
         console.log(req.params);
-        
+
         res.sendFile(path.join(__dirname, '../../client/game.html'));
     });
 

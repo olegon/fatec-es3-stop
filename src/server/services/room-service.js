@@ -5,6 +5,9 @@ module.exports = function (RoomModel) {
         },
         async getRooms() {
             return await getRooms(RoomModel);
+        },
+        async getRoomById(id) {
+            return await getRoomById(RoomModel, id);
         }
     };
 };
@@ -22,7 +25,13 @@ async function addRoom(RoomModel, room) {
 
 async function getRooms(RoomModel) {
     return await RoomModel
-    .find({}, '_id name categories')
+    .find({ active: true }, '_id name categories')
+    .populate('categories');
+}
+
+async function getRoomById(RoomModel, id) {
+    return await RoomModel
+    .find({ _id: id, active: true })
     .populate('categories');
 }
 

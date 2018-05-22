@@ -31,3 +31,18 @@ h3.styled {
     margin: 30px;
     text-align: left;
 }
+
+.stop-btn-ban-user {
+    width: 24px;
+    float: right;
+    cursor: pointer;
+}
+
+.stop-btn-power {
+    width: 160px;
+    cursor: pointer;
+}
+
+.stop-player-card {
+    background-color: #e8e8e8;
+}

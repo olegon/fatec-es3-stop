@@ -1,163 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Prototype: stop game</title>
+    <title>Stop</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/public/css/style.css">
+    <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet'>
 </head>
-
 <body>
-    <div>
-        Letra:
-        <span id="letra">_</span>
+    <div class="header"></div>
+    <div class="content text-center">
+        <h2 class="title">Stop Online</h2>
+        <div class="card">
+            <div class="card-body">
+                Stop é um jogo muito comum entre as crianças e até mesmo entre adultos, cada coluna recebe o nome de uma categoria de palavras como animais, automóveis, nomes, cores etc., e cada linha representa uma rodada do jogo.
+            </div>
+        </div>
+        <a type="button" class="btn btn-success btn-lg" style="font-size: 2em;" href="./new-game">Criar nova sala</a>
+        <a type="button" class="btn btn-primary btn-lg" style="font-size: 2em;" href="./rooms">Entrar em sala</a>
     </div>
+    <div class="footer"></div>
 
-    <div>
-        Jogadores:
-        <span id="jogadores"></span>
-    </div>
-
-    <div>
-        Jogadores aguardando:
-        <span id="jogadores-aguardando"></span>
-    </div>
-
-    <div>
-        Tempo:
-        <span id="tempo">_</span> sec.
-    </div>
-
-    <div style="margin: 1rem; color: #c00;">
-        <div>DEBUG: </div>
-        <table id="respostas">
-            <thead>
-                <tr>
-                    <th>Usuário</th>
-                    <th>Nome</th>
-                    <th>Fruta</th>
-                    <th>Cor</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-    </div>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Fruta</th>
-                <th>Cor</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    <input type="text" name="nome" id="nome" disabled>
-                </td>
-                <td>
-                    <input type="text" name="fruta" id="fruta" disabled>
-                </td>
-                <td>
-                    <input type="text" name="cor" id="cor" disabled>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div>
-        <button id="stop" disabled>Stop</button>
-    </div>
-
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-        var socket = io();
-
-        const $jogadores = document.querySelector('#jogadores');
-        const $jogadoresAguardando = document.querySelector('#jogadores-aguardando');
-        const $letra = document.querySelector('#letra');
-        const $tempo = document.querySelector('#tempo');
-        const $respostas = document.querySelector('#respostas');
-        const $nome = document.querySelector('#nome');
-        const $fruta = document.querySelector('#fruta');
-        const $cor = document.querySelector('#cor');
-        const $stop = document.querySelector('#stop');
-
-
-        socket.on('server_timer', (data) => {
-            console.log('server_timer', data);
-
-            $letra.textContent = data.letter;
-            $jogadores.textContent = data.currentPlayers.join(', ');
-            $jogadoresAguardando.textContent = data.waitingPlayers.join(', ');
-            $tempo.textContent = data.timeLeft / 1000;
-
-            const $tbody = $respostas.querySelector('tbody');
-            $tbody.innerHTML = '';
-            
-            Object.entries(data.wordsByUser)
-                .forEach(([usuario, palavras]) => {
-                    const tr = document.createElement('tr');
-                    const tdUsuario = document.createElement('td');
-                    const tdNome = document.createElement('td');
-                    const tdFruta = document.createElement('td');
-                    const tdCor = document.createElement('td');
-
-                    tdUsuario.textContent = usuario;
-                    tdNome.textContent = palavras.nome;
-                    tdFruta.textContent = palavras.fruta;
-                    tdCor.textContent = palavras.cor;
-
-                    tr.appendChild(tdUsuario);
-                    tr.appendChild(tdNome);
-                    tr.appendChild(tdFruta);
-                    tr.appendChild(tdCor);
-
-                    $tbody.appendChild(tr);
-                });
-        });
-
-        socket.on('new_match', (data) => {
-            $nome.value = '';
-            $fruta.value = '';
-            $cor.value = '';
-            $letra.textContent = data.letter;
-
-            $nome.disabled = false;
-            $fruta.disabled = false;
-            $cor.disabled = false;
-            $stop.disabled = false;
-
-            console.log('new_match', data);
-        });
-
-        socket.on('current_match', (data) => {            
-            console.log('current_match', data);
-        });
-
-        $stop.addEventListener('click', (e) => {
-            socket.emit('stop');
-        });
-
-        const sendWords = () => {
-            var nome = $nome.value;
-            var fruta = $fruta.value;
-            var cor = $cor.value;
-
-            socket.emit('sending_words', {
-                nome,
-                fruta,
-                cor
-            });
-        }
-
-        $nome.addEventListener('input', sendWords);
-        $fruta.addEventListener('input', sendWords);
-        $cor.addEventListener('input', sendWords);
-    </script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
-
 </html>

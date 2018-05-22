@@ -8,7 +8,7 @@ const gameService = require('./services/game-service')(playerService, wordServic
 
 module.exports = function (app, server) {
     const io = socketIO(server);
-
+    
     app.use('/public', express.static(path.join(__dirname, '../../client/public')));
 
     app.get('/logic', (req, res) => {

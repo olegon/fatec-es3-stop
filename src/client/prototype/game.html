@@ -11,25 +11,99 @@
     <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet'>
 </head>
 <body>
-    <div class="header"></div>
+    <div class="header text-right">
+        <div style="padding-top: 85px; padding-right: 50px;">
+            <h3 class="styled" style="display: inline; padding-right: 15px;">Player 1</h3>
+            <a href="index.html" class="btn btn-sm btn-danger" style="vertical-align: bottom;">Sair</a>
+        </div>
+    </div>
     <div class="content text-center">
         <h2 class="title">Stop Online</h2>
-        <h4>
-            Rodada: <span>1/3</span>
+        <h4 style="padding-top: 20px;">
+            Rodada: <span>3/3</span>
             &nbsp;&nbsp;&nbsp;&nbsp;
             Letra: <span>A</span>
         </h4>
-        <div style="text-align: left ;">
-            <label>Nome</label>
-            <input type="text" class="form-control" placeholder="A...">
-            <label>Fruta</label>
-            <input type="text" class="form-control" placeholder="A...">
-            <label>Cor</label>
-            <input type="text" class="form-control" placeholder="A...">
-            <label>CEP</label>
-            <input type="text" class="form-control" placeholder="A...">
+        <div style="text-align: left; padding-top: 20px;">
+            <table class="table table-bordered table-hover table-striped">
+                <thead class="thead-light">
+                    <tr>
+                        <th style="width: 10%;"></th>
+                        <th>Nome</th>
+                        <th>Fruta</th>
+                        <th>Cor</th>
+                        <th>CEP</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" class="form-control" value="C" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="Camila" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="Carambola" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="Castanho" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="Canadá" disabled="disabled"></td>
+                        <td>30,00</td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="form-control" value="B" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="Bruno" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="Banana" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="Bege" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="Brasil" disabled="disabled"></td>
+                        <td>35,00</td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="form-control" value="A" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" placeholder="A..."></td>
+                        <td><input type="text" class="form-control" placeholder="A..."></td>
+                        <td><input type="text" class="form-control" placeholder="A..."></td>
+                        <td><input type="text" class="form-control" placeholder="A..."></td>
+                        <td>00,00</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <a type="button" class="btn btn-primary btn-lg" style="font-size: 2em; margin-top: 10px;" href="./index.html">STOP!</a>
+
+        <div class="row">
+            <div class="col-md-3" style="padding: 0;">
+                <div class="card bg-light">
+                    <div class="card-header">Jogador 1</div>
+                    <div class="card-body">
+                        <h5 class="card-title">Pontos: 20</h5>
+                        <p class="card-text">Especiais: .</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3" style="padding: 0;">
+                <div class="card text-white bg-danger">
+                    <div class="card-header">Jogador 2</div>
+                    <div class="card-body">
+                        <h5 class="card-title">Pontos: 10</h5>
+                        <p class="card-text">Especiais: .</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3" style="padding: 0;">
+                <div class="card bg-light">
+                    <div class="card-header">Jogador 3</div>
+                    <div class="card-body">
+                        <h5 class="card-title">Pontos: 30</h5>
+                        <p class="card-text">Especiais: .</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3" style="padding: 0;">
+                <div class="card text-white bg-warning">
+                    <div class="card-header">Jogador 4</div>
+                    <div class="card-body">
+                        <h5 class="card-title">Pontos: 25</h5>
+                        <p class="card-text">Especiais: .</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="footer"></div>
 

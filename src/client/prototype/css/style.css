@@ -3,17 +3,17 @@ body{
 }
 
 .header{
-    background: url("../img/main-top.png.xhtml");
+    background: url("../img/main-top.png");
     height: 65px;
 }
 
 .content{
-    background: url("../img/main-bg.png.xhtml") repeat;
-    padding: 10%;
+    background: url("../img/main-bg.png") repeat;
+    padding: 5%;
 }
 
 .footer{
-    background: url("../img/main-footer.png.xhtml");
+    background: url("../img/main-footer.png");
     height: 67px;
 }
 
@@ -21,6 +21,10 @@ body{
     font-family: 'Pacifico';
     font-size: 3em;
     color: #3280ff;
+}
+
+h3.styled {
+    font-family: 'Pacifico';   
 }
 
 .card {

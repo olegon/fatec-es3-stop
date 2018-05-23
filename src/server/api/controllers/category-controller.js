@@ -1,15 +1,17 @@
 const mongoose = require('mongoose');
 const Category = mongoose.model('Category');
 const Word = mongoose.model('Word');
+const Room = mongoose.model('Room');
 
 exports.get = (req, res) => {
     Category
         .find({}, 'name')
-        .then(data => {
-            res.status(200).send(data);    
+        .then(categories => {
+            res.status(200).json(categories);    
         })
-        .catch(e => {
-            res.status(500).send(e);                
+        .catch(err => {
+            res.status(500).json({ message: "Falha ao buscar categorias", 
+            err: err });                
         });
 }
 
@@ -19,11 +21,11 @@ exports.post = (req, res) => {
     category
         .save()
         .then(() => {
-            res.status(200).send({ message: "Categoria cadastrada com sucesso" });    
+            res.status(200).json({ message: "Categoria cadastrada com sucesso" });    
         })
         .catch(err => {
-            res.status(500).send({ message: "Falha ao cadastrar categoria", 
-            data: err });                
+            res.status(500).json({ message: "Falha ao cadastrar categoria", 
+            err: err });                
         });
 }
 
@@ -32,15 +34,25 @@ exports.delete = (req, res) => {
 
     Word
     .deleteMany({ category: id })
+    .then(() => 
+        Room.updateMany(
+            { categories: id },
+            {
+                $pull: { categories: id },
+                active: false,
+                reason: 'Uma categoria foi removida.'
+            }
+        )
+    )
     .then(() =>
         Category
         .deleteMany({ _id: id })
     )
     .then(() => {
-        res.status(200).send({ message: "Categoria removida com sucesso" });    
+        res.status(200).json({ message: "Categoria removida com sucesso" });    
     })
     .catch(err => {
-        res.status(500).send({ message: "Falha ao remover categoria.", 
-        data: err });                
+        res.status(500).json({ message: "Falha ao remover categoria.", 
+        err: err });                
     });
 }

@@ -10,7 +10,6 @@ const schema = new Schema({
     categories: [
         {
             type: Schema.Types.ObjectId,
-            required: true,
             ref: 'Category'
         }
     ],
@@ -18,6 +17,9 @@ const schema = new Schema({
         type: Boolean,
         required: true,
         default: true
+    },
+    reason: {
+        type: String
     },
 });
 

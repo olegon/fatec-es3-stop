@@ -9,11 +9,9 @@ function choice(array) {
 }
 
 function service (playerService, wordService) {
-    let currentMatch = null;
-    
     return {
         initMatch (duration = 15000) {
-            currentMatch = initMatch(playerService, wordService, duration);
+            initMatch(playerService, wordService, duration);  
         },
     }
 }

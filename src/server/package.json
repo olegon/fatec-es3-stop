@@ -25,6 +25,7 @@
     "socket.io": "^2.0.4"
   },
   "devDependencies": {
-    "nodemon": "^1.17.3"
+    "nodemon": "^1.17.3",
+    "pubsub-js": "^1.6.0"
   }
 }

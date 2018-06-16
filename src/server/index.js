@@ -3,6 +3,7 @@ const express = require('express');
 const hbs = require('express-handlebars');
 const debug = require('debug')('node:server');
 const mongoose = require('mongoose');
+const PubSub = require('pubsub-js');
 
 const apiSetup = require('./api');
 const gameCoreSetup = require('./game-core');
@@ -21,9 +22,9 @@ mongoose.connect('mongodb://localhost:27017/test');
 app.engine('hbs', hbs({ defaultLayout: 'main', extname: 'hbs' }));
 app.set('view engine', 'hbs');
 
-gameCoreSetup(app, server);
-apiSetup(app, server);
-backofficeSetup(app, server);
+gameCoreSetup(app, server, PubSub);
+apiSetup(app, server, PubSub);
+backofficeSetup(app, server, PubSub);
 
 server.listen(process.env.PORT);
 server.on('error', onError);

@@ -31,7 +31,7 @@ async function getRooms(RoomModel) {
 
 async function getRoomById(RoomModel, id) {
     return await RoomModel
-    .find({ _id: id, active: true })
+    .findById(id)
     .populate('categories');
 }
 

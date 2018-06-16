@@ -2,13 +2,19 @@ const path = require('path');
 const express = require('express');
 const socketIO = require('socket.io');
 
-const playerService = require('./services/player-service')();
-const wordService = require('./services/word-service')();
-const gameService = require('./services/game-service')(playerService, wordService);
 
-module.exports = function (app, server) {
+
+module.exports = function (app, server, PubSub) {
+    const { Room: RoomModel } = require('../api/models');
+    const dbRoomService = require('../services/room-service')(RoomModel);
+
+    const playerService = require('./services/player-service')();
+    const wordService = require('./services/word-service')();
+    const gameService = require('./services/game-service')(playerService, wordService);
+    const roomService = require('./services/room-service')(playerService, dbRoomService);
+
     const io = socketIO(server);
-    
+
     app.use('/public', express.static(path.join(__dirname, '../../client/public')));
 
     app.get('/logic', (req, res) => {
@@ -23,9 +29,7 @@ module.exports = function (app, server) {
         res.sendFile(path.join(__dirname, '../../client/rooms.html'));
     });
 
-    app.get('/game/:roomId', (req, res) => {
-        console.log(req.params);
-
+    app.get('/game/:roomId', async (req, res) => {
         res.sendFile(path.join(__dirname, '../../client/game.html'));
     });
 
@@ -35,19 +39,24 @@ module.exports = function (app, server) {
 
     io.on('connection', (socket) => {
         const { id } = socket;
+
         console.log(`# user connected: ${id}`);
-        
+
         playerService.connect(socket);
-    
-        const players = playerService.getPlayers();
-        console.log('# connected users:');
-        players.forEach(user => {
-            console.log(`\t${user.id}`)
+
+        socket.on('join_room', (data) => {
+            roomService.join(socket, data);
         });
-    
-        socket.on('disconnect', function(){
+
+        // console.log('# connected users:');
+        // const players = playerService.getPlayers();
+        // players.forEach(user => {
+        //     console.log(`\t${user.id}`)
+        // });
+
+        socket.on('disconnect', function () {
             playerService.disconnect(socket);
-            console.log('# user disconnected');
+            console.log(`# user disconnected: ${id}`);
         });
     });
 

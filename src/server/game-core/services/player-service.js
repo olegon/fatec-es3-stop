@@ -16,7 +16,7 @@ function service() {
 
             eventEmitter.emit(EVENT_NAME_PLAYER_CONNECTED, player);
         },
-        
+
         getPlayers () {
             return [...players];
         },

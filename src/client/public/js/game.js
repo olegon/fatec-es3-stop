@@ -40,15 +40,18 @@ var numberCategories = 0;
 function init(data){
     numberCategories = data.room.categories.length;
     
-    $("#table-game .thead-light").append("<tr>");
-    $("#table-game .thead-light").append("<th style='width: 10%;'></th>");
+    let headerCategories;
+
+    headerCategories += "<tr>";
+    headerCategories += "<th style='width: 10%;'></th>";
 
     data.room.categories.forEach(element => {
-        $("#table-game .thead-light").append("<th>" + element.name + "</th>");
+        headerCategories += "<th>" + element.name + "</th>";
     });
 
-    $("#table-game .thead-light").append("<th>Total</th>");
-    $("#table-game .thead-light").append("</tr>");
+    headerCategories += "<th>Total</th>";
+    headerCategories += "</tr>";
+    $("#table-game .thead-light").append(headerCategories);
 }
 
 function update(data) {
@@ -61,8 +64,16 @@ function newRound(letter){
     $("#current-letter").html(letter);
     $("#current-round").html(currentRound);
 
-    $("#table-game tbody").append("<tr>");
-    $("#table-game tbody").append("<td><input type='text' class='form-control' value='" + letter + "' disabled='disabled'></td>");
-    $("#table-game tbody").append("<td><input type='text' class='form-control' placeholder='" + letter + "...'></td>");
-    $("#table-game tbody").append("</tr>");
+    let lineCategory;
+
+    lineCategory += "<tr>";
+    lineCategory += "<td><input type='text' class='form-control' value='" + letter + "' disabled='disabled'></td>";
+    
+    for (var i = 0; i < numberCategories; i++) {
+        lineCategory += "<td><input type='text' class='form-control' placeholder='" + letter + "...'></td>";
+    }
+
+    lineCategory += "<td>00,00</td>";
+    lineCategory += "</tr>";
+    $("#table-game tbody").append(lineCategory);
 }

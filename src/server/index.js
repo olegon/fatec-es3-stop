@@ -13,8 +13,8 @@ const port = process.env.PORT || 8080;
 const app = express();
 const server = http.createServer(app);
 
-mongoose.connect('mongodb://nodestop:nodestop@ds153869.mlab.com:53869/nodestop');
-// mongoose.connect('mongodb://localhost:27017/test');
+// mongoose.connect('mongodb://nodestop:nodestop@ds153869.mlab.com:53869/nodestop');
+mongoose.connect('mongodb://localhost:27017/test');
 
 app.engine('hbs', hbs({ defaultLayout: 'main', extname: 'hbs' }));
 app.set('view engine', 'hbs');

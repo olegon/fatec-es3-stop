@@ -1,4 +1,4 @@
-const messages = require('./messages-definition');
+const constants = require('./constants');
 
 module.exports = service;
 
@@ -13,7 +13,7 @@ function service(PubSub) {
 
             players.push(newPlayer);
 
-            PubSub.publish(messages.PLAYER_CONNECTED_MESSAGE, newPlayer);
+            PubSub.publish(constants.PLAYER_CONNECTED_MESSAGE, newPlayer);
         },
 
         getPlayers () {
@@ -39,7 +39,7 @@ function service(PubSub) {
 
                 players.splice(playerIndex, 1);
 
-                PubSub.publish(messages.PLAYER_DISCONNECTED_MESSAGE, player);
+                PubSub.publish(constants.PLAYER_DISCONNECTED_MESSAGE, player);
             }
         },
     }

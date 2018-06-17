@@ -12,3 +12,5 @@ module.exports.MATCH_ENDED_MESSAGE = 'match.end';
 module.exports.ROUND_STARTED_MESSAGE = 'round.started';
 module.exports.ROUND_ENDED_MESSAGE = 'round.ended';
 
+module.exports.ROOM_STATUS_WAITING_FOR_PLAYERS  = 'WAITING_FOR_PLAYERS';
+module.exports.ROOM_STATUS_RUNNING  = 'RUNNING';

@@ -1,26 +1,14 @@
 const events = require('events');
 const util = require('../util');
 
-const messages = require('./messages-definition');
+const constants = require('./constants');
 
 module.exports = service;
 
 function service(PubSub, dbRoomService, playerService) {
     const runningRooms = {};
 
-    PubSub.subscribe(messages.PLAYER_DISCONNECTED_MESSAGE, function (msg, player) {
-        Object.entries(runningRooms)
-        .forEach(([roomId, room]) => {
-            for (let roomPlayer of room.players) {
-                if (roomPlayer == player) {
-                    PubSub.publish(messages.ROOM_PLAYER_LEFT_MESSAGE, {
-                        player,
-                        room
-                    });
-                }
-            }
-        });
-    });
+    registerToPlayerDisconnectTopic(PubSub, runningRooms);
 
     return {
         async join(socket, parameters) {
@@ -32,7 +20,7 @@ function service(PubSub, dbRoomService, playerService) {
             const dbRoom = await dbRoomService.getRoomById(roomId);
 
             const player = playerService.getPlayerBySocket(socket);
-           
+
             if (player == null) {
                 return;
             }
@@ -48,6 +36,24 @@ function service(PubSub, dbRoomService, playerService) {
             }
         }
     }
+}
+
+function registerToPlayerDisconnectTopic(PubSub, runningRooms) {
+    PubSub.subscribe(constants.PLAYER_DISCONNECTED_MESSAGE, function (msg, player) {
+        Object.entries(runningRooms)
+            .forEach(([roomId, room]) => {
+                const playerIndex = room.players.indexOf(player);
+
+                if (playerIndex > -1) {
+                    room.players.splice(playerIndex, 1);
+
+                    PubSub.publish(constants.ROOM_PLAYER_LEFT_MESSAGE, {
+                        player,
+                        room
+                    });
+                }
+            });
+    });
 }
 
 function handleRoomNotFound(socket) {
@@ -74,11 +80,9 @@ function handleRoomFound(PubSub, player, dbRoom, roomsInGame) {
         joinRoom(PubSub, player, roomInGame);
     }
     else {
-        const roomInGame = startNewRoom(PubSub, dbRoom);
+        const roomInGame = startNewRoom(PubSub, player, dbRoom);
 
         roomsInGame[roomId] = roomInGame;
-
-        joinRoom(PubSub, player, roomInGame);
     }
 
     const roomInGame = roomsInGame[roomId];
@@ -94,7 +98,8 @@ function handleRoomFound(PubSub, player, dbRoom, roomsInGame) {
         name: dbRoom.name,
         categories: dbRoom.categories,
         playerId: player.socket.id,
-        players: playersToEmit
+        players: playersToEmit,
+        status: roomInGame.status
     };
 
     player.socket.emit('room_found', {
@@ -102,14 +107,14 @@ function handleRoomFound(PubSub, player, dbRoom, roomsInGame) {
     });
 }
 
-function startNewRoom (PubSub, dbRoom) {
+function startNewRoom(PubSub, player, dbRoom) {
     const room = {
         dbRoom,
-        players: [],
-        points: {}
+        players: [ player ],
+        status: constants.ROOM_STATUS_WAITING_FOR_PLAYERS
     };
 
-    PubSub.publish(messages.ROOM_CREATE_MESSAGE, room);
+    PubSub.publish(constants.ROOM_CREATE_MESSAGE, room);
 
     return room;
 }
@@ -117,7 +122,7 @@ function startNewRoom (PubSub, dbRoom) {
 function joinRoom(PubSub, player, room) {
     room.players.push(player);
 
-    PubSub.publish(messages.ROOM_PLAYER_JOIN_MESSAGE, {
+    PubSub.publish(constants.ROOM_PLAYER_JOIN_MESSAGE, {
         player,
         room
     });

@@ -1,4 +1,4 @@
-const messages = require('./messages-definition');
+const constants = require('./constants');
 
 module.exports = service;
 
@@ -11,37 +11,71 @@ function choice(array) {
 }
 
 function service (PubSub) {
-    PubSub.subscribe(messages.ROOM_CREATE_MESSAGE, (msg, room) => {
-        startNewMatch(PubSub, room);
+    PubSub.subscribe(constants.ROOM_CREATE_MESSAGE, (msg, room) => {
+        prepareMatch(PubSub, room);
     });
 
-    return {
-
-    }
+    PubSub.subscribe(constants.MATCH_STARTED_MESSAGE, (msg, { room, match }) => {
+        startMatch(PubSub, room, match);
+    });
 }
 
-async function startNewMatch(PubSub, room) {
-    console.log('# starting new match');
-
+function prepareMatch(PubSub, room) {
+    console.log(`# preparing new match for room: ${room.dbRoom._id}`);
+    
     const match = {
         currentRound: 0,
         rounds: 5,
         players: [],
-        waitingPlayers: []
+        waitingPlayers: [...room.players]
     };
 
-    PubSub.subscribe(messages.ROOM_PLAYER_JOIN_MESSAGE, (msg, { player, room: destinationRoom }) => {
-        if (room == destinationRoom) {
+    PubSub.subscribe(constants.ROOM_PLAYER_JOIN_MESSAGE, (msg, { player, room: destinationRoom }) => {
+        if (room === destinationRoom) {
             match.waitingPlayers.push(player);
-            
-            console.log(match);
+
+            if (room.status === constants.ROOM_STATUS_WAITING_FOR_PLAYERS && match.waitingPlayers.length >= 2) {
+                room.status = constants.ROOM_STATUS_RUNNING;
+
+                match.players = match.waitingPlayers;
+                match.waitingPlayers = [];
+
+                PubSub.publish(constants.MATCH_STARTED_MESSAGE, {
+                    room,
+                    match
+                });
+            }
         }
     });
 
-    PubSub.subscribe(messages.ROOM_PLAYER_LEFT_MESSAGE, (msg, { player, room: originRoom }) => {
-        if (room == originRoom) {
-            console.log(match);
+    PubSub.subscribe(constants.ROOM_PLAYER_LEFT_MESSAGE, (msg, { player, room: originRoom }) => {
+        if (room === originRoom) {
+            const playerIndex = match.players.indexOf(player);
+
+            if (playerIndex > -1) {
+                match.players.splice(playerIndex, 1);
+            }
+
+            const waitingPlayerIndex = match.waitingPlayers.indexOf(player);
+
+            if (waitingPlayerIndex > -1) {
+                match.waitingPlayers.splice(waitingPlayerIndex, 1);
+            }
         }
+    });
+
+}
+
+async function startMatch(PubSub, room, match) {
+    console.log('# start match');
+    
+    match.players.forEach(player => {
+        const { socket } = player;
+
+        socket.emit('new_match', {
+            players: match.players.map(player => player.socket.id),
+            waitingPlayers: match.waitingPlayers.map(player => player.socket.id),
+        });
     });
 
     while (match.currentRound <= match.rounds) {
@@ -56,7 +90,6 @@ async function startNewMatch(PubSub, room) {
     
     console.log('# ending match');
 }
-
 
 function delay(timeout) {
     return new Promise(res => {

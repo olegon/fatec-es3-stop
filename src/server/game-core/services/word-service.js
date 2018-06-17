@@ -1,17 +1,9 @@
 module.exports = service;
 
-function service() {
-    
-    return {
-        isName (word) {
-            return Math.random() < 0.5;
-        },
-        
-        isFruit (word) {
-            return Math.random() < 0.5;
-        },
+function service(dbWorkService) {
 
-        isColor (word) {
+    return {
+        async isValid (word, category) {
             return Math.random() < 0.5;
         }
     }

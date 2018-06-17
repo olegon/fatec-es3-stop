@@ -39,6 +39,8 @@
     });
 
     socket.on('match_ended', (data) => {
+        matchEnded(data);
+        
         console.log('match_ended', data);
     });
 
@@ -135,7 +137,15 @@
     }
 
     function matchEnded(data) {
-
+        const winner = _players.reduce(function(prev, current) {
+            return (prev.score > current.score) ? prev : current
+        });
+        
+        $("#game-message").html(`
+        <h4 style="padding-top: 20px;">Partida Encerrada!</h4>
+        <h2 class="title">Vencedor: ` + winner.playerId + `</h2>`);
+        $("#game-message").show();
+        $("#match").hide();
     }
 
     function roomNotFound() {
@@ -143,6 +153,7 @@
             <h4 style="padding-top: 20px;">Sala não encontrada</h4>
             <img src="/public/img/page_not_found.gif" style="width: 65vh" alt="not found" title="Sala não encontrada." />`);
         $("#game-message").show();
+        $("#match").hide();
     }
 
     function updatePlayers() {

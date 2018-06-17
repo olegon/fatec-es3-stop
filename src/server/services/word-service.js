@@ -23,8 +23,7 @@ async function addWord(WordModel, word) {
 async function findWord(WordModel, word) {
     const normalized_name = normalizeWord(word);
     
-    return await
-        WorkModel
+    return await WordModel
         .find({ normalized_name })
         .populate('category');
 }

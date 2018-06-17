@@ -5,7 +5,7 @@ const SERVER_TICK_IN_MS = 1000;
 
 module.exports = service;
 
-function service(PubSub) {
+function service(PubSub, wordService) {
     return {
         async startRound(room, match) {
             return await startRound(PubSub, room, match);

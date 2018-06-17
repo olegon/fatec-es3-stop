@@ -92,7 +92,7 @@
             let boxPlayers = "";
             
             for (let i = 0; i < _players.length; i++){
-                if (data.currentPlayers[i] == _playerId) {
+                if (data.currentPlayers[i].playerId == _playerId) {
                     boxPlayers += ""
                     +"<div class='col-md-" + boxSize + "' style='padding: 0;'>"
                     +    "<div class='card text-white bg-info stop-player-card'>"

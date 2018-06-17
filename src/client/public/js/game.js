@@ -2,6 +2,7 @@
     const [, roomId] = /^\/game\/(.*?)$/.exec(location.pathname);
     
     const socket = io();
+    let playerId;
     let currentRound = 0;
     let numberCategories = 0;
     let numberPlayers = 0;
@@ -14,6 +15,12 @@
         init(data);
 
         console.log('room_found', data);
+    });
+
+    socket.on('new_round', (data) => {
+        newRound(data);
+        
+        console.log('new_round', data);
     });
 
     socket.on('room_not_found', (data) => {
@@ -31,12 +38,11 @@
     });
 
     socket.on('new_match', (data) => {
-        newRound(data.letter);
-
         console.log('new_match', data);
     });
 
     function init(data){
+        playerId = data.room.playerId;
         numberCategories = data.room.categories.length;
         
         $("#room-name").html(data.room.name);
@@ -45,6 +51,9 @@
         if (data.room.status == "WAITING_FOR_PLAYERS") {
             $("#match").hide();
             $("#waiting-players").show();
+        } else {
+            $("#match").show();
+            $("#waiting-players").hide();
         }
 
         let headerCategories;
@@ -92,19 +101,22 @@
         }
     }
 
-    function newRound(letter){
+    function newRound(data){
         currentRound += 1;
 
-        $("#current-letter").html(letter);
+        $("#match").show();
+        $("#waiting-players").hide();
+
+        $("#current-letter").html(data.letter);
         $("#current-round").html(currentRound);
 
         let lineCategory;
 
         lineCategory += "<tr>";
-        lineCategory += "<td><input type='text' class='form-control' value='" + letter + "' disabled='disabled'></td>";
+        lineCategory += "<td><input type='text' class='form-control' value='" + data.letter + "' disabled='disabled'></td>";
         
         for (var i = 0; i < numberCategories; i++) {
-            lineCategory += "<td><input type='text' class='form-control' placeholder='" + letter + "...'></td>";
+            lineCategory += "<td><input type='text' class='form-control' placeholder='" + data.letter + "...'></td>";
         }
 
         lineCategory += "<td>00,00</td>";

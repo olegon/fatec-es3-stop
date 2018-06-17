@@ -30,6 +30,14 @@
         console.log('roomt_not_active', data);
     });
 
+    socket.on('round_ended', (data) => {
+        console.log('round_ended', data);
+    });
+
+    socket.on('match_ended', (data) => {
+        console.log('match_ended', data);
+    });
+
     socket.on('server_timer', (data) => {
         update(data);
         

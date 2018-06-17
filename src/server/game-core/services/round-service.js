@@ -79,7 +79,6 @@ async function startRound(PubSub, wordService, room, match) {
 }
 
 async function validate(wordService, room, match, socketIdToWords) {
-
     for (let socketId in socketIdToWords) {
         const categoryToWord = socketIdToWords[socketId];
 
@@ -89,16 +88,12 @@ async function validate(wordService, room, match, socketIdToWords) {
 
         for (let category in categoryToWord) {
             const word = categoryToWord[category];
+            
+            console.log(`${socketId} sent word ${word} of category ${category}`);
 
             if (await wordService.isValid(word, category)) {
-                console.log('valid');
                 currentPlayer.score += 50;
             }
-            else {
-                console.log('invalid');
-            }
-
-            console.log(`${socketId} sent word ${word} of category ${category}`);
         }
     }
 }

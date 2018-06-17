@@ -3,10 +3,14 @@ module.exports = service;
 function service(dbWordService) {
 
     return {
-        async isValid (word, category) {
-            const words = await dbWordService.findWord(word);
-            
-            return Math.random() > 0.5;
+        async isValid (typedWord, category) {
+            const words = await dbWordService.findWord(typedWord);
+
+            for (let word of words) {
+                if (word.active && word.category._id == category) return true;
+            }
+
+            return false;
         }
     }
     

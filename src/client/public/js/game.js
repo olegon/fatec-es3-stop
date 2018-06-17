@@ -39,6 +39,14 @@
     function init(data){
         numberCategories = data.room.categories.length;
         
+        $("#room-name").html(data.room.name);
+        $("#player-id").html(data.room.playerId);
+
+        if (data.room.status == "WAITING_FOR_PLAYERS") {
+            $("#match").hide();
+            $("#waiting-players").show();
+        }
+
         let headerCategories;
 
         headerCategories += "<tr>";
@@ -50,6 +58,7 @@
 
         headerCategories += "<th>Total</th>";
         headerCategories += "</tr>";
+
         $("#table-game .thead-light").append(headerCategories);
     }
 
@@ -68,10 +77,8 @@
                 boxPlayers += ""
                 +"<div class='col-md-" + boxSize + "' style='padding: 0;'>"
                 +    "<div class='card stop-player-card'>"
-                +        "<div class='card-header'>" + data.currentPlayers[i] + "<span class='player-score'>Pontos: 20</span><img class='stop-btn-ban-user' src='/public/img/ban-user.png' alt='ban user button' title='Banir usuário.' /></div>"
+                +        "<div class='card-header'>" + data.currentPlayers[i] + "<span class='player-score'>Pontos: 20&nbsp;&nbsp;<img class='stop-btn-ban-user' src='/public/img/ban-user.png' alt='ban user button' title='Banir usuário.' /></span></div>"
                 +        "<div class='card-body'>"
-                //+            "<h5 class='card-title'></h5>"
-                //+            "<p class='card-text'>Especiais:</p>"
                 +            "<div class='text-center'>"
                 //+                "<img class='stop-btn-power' src='/public/img/power-stop.png' alt='skill special stop' title='Usar poder stop.' />"
                 +                "<img class='stop-btn-power' src='/public/img/power-freeze.png' alt='skill freeze enemy' title='Congelar jogador.' />"

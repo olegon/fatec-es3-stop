@@ -10,6 +10,7 @@ body{
 .content{
     background: url("../img/main-bg.png") repeat;
     padding: 5%;
+    min-height: 79vh;
 }
 
 .footer{
@@ -48,6 +49,6 @@ h3.styled {
 }
 
 .stop-player-card .player-score {
-    text-align: right;
+    float: right;
     font-weight: 500;
 }

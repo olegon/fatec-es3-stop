@@ -2,6 +2,9 @@
     const [, roomId] = /^\/game\/(.*?)$/.exec(location.pathname);
     
     const socket = io();
+    let currentRound = 0;
+    let numberCategories = 0;
+    let numberPlayers = 0;
 
     socket.emit('join_room', {
         roomId
@@ -32,48 +35,76 @@
 
         console.log('new_match', data);
     });
-})();   
 
-var currentRound = 0;
-var numberCategories = 0;
+    function init(data){
+        numberCategories = data.room.categories.length;
+        
+        let headerCategories;
 
-function init(data){
-    numberCategories = data.room.categories.length;
-    
-    let headerCategories;
+        headerCategories += "<tr>";
+        headerCategories += "<th style='width: 10%;'></th>";
 
-    headerCategories += "<tr>";
-    headerCategories += "<th style='width: 10%;'></th>";
+        data.room.categories.forEach(element => {
+            headerCategories += "<th>" + element.name + "</th>";
+        });
 
-    data.room.categories.forEach(element => {
-        headerCategories += "<th>" + element.name + "</th>";
-    });
-
-    headerCategories += "<th>Total</th>";
-    headerCategories += "</tr>";
-    $("#table-game .thead-light").append(headerCategories);
-}
-
-function update(data) {
-    $("#time-left").html(data.timeLeft / 1000);
-}
-
-function newRound(letter){
-    currentRound += 1;
-
-    $("#current-letter").html(letter);
-    $("#current-round").html(currentRound);
-
-    let lineCategory;
-
-    lineCategory += "<tr>";
-    lineCategory += "<td><input type='text' class='form-control' value='" + letter + "' disabled='disabled'></td>";
-    
-    for (var i = 0; i < numberCategories; i++) {
-        lineCategory += "<td><input type='text' class='form-control' placeholder='" + letter + "...'></td>";
+        headerCategories += "<th>Total</th>";
+        headerCategories += "</tr>";
+        $("#table-game .thead-light").append(headerCategories);
     }
 
-    lineCategory += "<td>00,00</td>";
-    lineCategory += "</tr>";
-    $("#table-game tbody").append(lineCategory);
-}
+    function update(data) {
+        $("#time-left").html(data.timeLeft / 1000);
+
+        var playersChange = numberPlayers != data.currentPlayers.length; 
+
+        if (playersChange) {
+            numberPlayers = data.currentPlayers.length;
+            
+            let boxSize = numberPlayers < 2 ? 6 : (12 / numberPlayers);
+            let boxPlayers = "";
+            
+            for (let i = 0; i < numberPlayers; i++){
+                boxPlayers += ""
+                +"<div class='col-md-" + boxSize + "' style='padding: 0;'>"
+                +    "<div class='card stop-player-card'>"
+                +        "<div class='card-header'>" + data.currentPlayers[i] + "<span class='player-score'>Pontos: 20</span><img class='stop-btn-ban-user' src='/public/img/ban-user.png' alt='ban user button' title='Banir usuário.' /></div>"
+                +        "<div class='card-body'>"
+                //+            "<h5 class='card-title'></h5>"
+                //+            "<p class='card-text'>Especiais:</p>"
+                +            "<div class='text-center'>"
+                //+                "<img class='stop-btn-power' src='/public/img/power-stop.png' alt='skill special stop' title='Usar poder stop.' />"
+                +                "<img class='stop-btn-power' src='/public/img/power-freeze.png' alt='skill freeze enemy' title='Congelar jogador.' />"
+                +            "</div>"
+                +        "</div>"
+                +    "</div>"
+                +"</div>";
+            }
+
+            $("#current-players").html(boxPlayers);
+        }
+    }
+
+    function newRound(letter){
+        currentRound += 1;
+
+        $("#current-letter").html(letter);
+        $("#current-round").html(currentRound);
+
+        let lineCategory;
+
+        lineCategory += "<tr>";
+        lineCategory += "<td><input type='text' class='form-control' value='" + letter + "' disabled='disabled'></td>";
+        
+        for (var i = 0; i < numberCategories; i++) {
+            lineCategory += "<td><input type='text' class='form-control' placeholder='" + letter + "...'></td>";
+        }
+
+        lineCategory += "<td>00,00</td>";
+        lineCategory += "</tr>";
+
+        $("#table-game tbody tr:last-child :input").attr("disabled", true);
+        $("#table-game tbody").append(lineCategory);
+    }
+
+})();   

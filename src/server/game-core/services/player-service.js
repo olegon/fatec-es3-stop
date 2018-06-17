@@ -1,41 +1,48 @@
-const events = require('events');
-const util = require('../util');
+const messages = require('./messages-definition');
 
 module.exports = service;
 
-const EVENT_NAME_PLAYER_CONNECTED = 'playerConnected';
-const EVENT_NAME_PLAYER_DISCONNECTED = 'playerDiconnected';
-
-function service() {
+function service(PubSub) {
     const players = [];
-    const eventEmitter = new events.EventEmitter();
     
     return {
-        connect (player) {
-            players.push(player);
+        connect (socket) {
+            const newPlayer = {
+                socket
+            };
 
-            eventEmitter.emit(EVENT_NAME_PLAYER_CONNECTED, player);
+            players.push(newPlayer);
+
+            PubSub.publish(messages.PLAYER_CONNECTED_MESSAGE, newPlayer);
         },
 
         getPlayers () {
             return [...players];
         },
-        
-        onPlayerConnected (listener) {
-            return util.bindEvent(eventEmitter, EVENT_NAME_PLAYER_CONNECTED, listener);
-        },
 
-        onPlayerDisconnected (listener) {
-            return util.bindEvent(eventEmitter, EVENT_NAME_PLAYER_DISCONNECTED, listener);
+        getPlayerBySocket(socket) {
+            const playerIndex = players.findIndex(player => player.socket === socket);
+
+            if (playerIndex > -1) {
+                return  players[playerIndex];
+            }
+            else {
+                return null;
+            }
         },
         
-        disconnect (player) {
-            const index = players.indexOf(player);
+        disconnect (socket) {
+            const playerIndex = players.findIndex(player => player.socket === socket);
             
-            if (index > -1) {
-                players.splice(index, 1);
-                eventEmitter.emit(EVENT_NAME_PLAYER_DISCONNECTED, player);
+            if (playerIndex > -1) {
+                const player = players[playerIndex];
+
+                players.splice(playerIndex, 1);
+
+                PubSub.publish(messages.PLAYER_DISCONNECTED_MESSAGE, player);
             }
         },
     }
 }
+
+

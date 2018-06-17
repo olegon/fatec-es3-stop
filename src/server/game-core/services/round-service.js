@@ -27,6 +27,11 @@ async function startRound(PubSub, wordService, room, match) {
         socket.emit('new_round', {
             letter: letter,
             currentRound: match.currentRound,
+            currentPlayers: match.currentPlayers.map(player => ({
+                playerId: player.socket.id,
+                score: player.score
+            })),
+            waitingPlayers: match.waitingPlayers.map(player => player.socket.id)
         });
 
         socket.on('typed_word', (typeWordEvent) => {
@@ -46,10 +51,7 @@ async function startRound(PubSub, wordService, room, match) {
 
             socket.emit('server_timer', {
                 timeLeft,
-                currentPlayers: match.currentPlayers.map(player => ({
-                    playerId: player.socket.id,
-                    score: player.score
-                })),
+                currentPlayers: match.currentPlayers.map(player => player.socket.id),
                 waitingPlayers: match.waitingPlayers.map(player => player.socket.id),
             });
         }
@@ -64,7 +66,14 @@ async function startRound(PubSub, wordService, room, match) {
     for (let player of match.currentPlayers) {
         const { socket } = player;
 
-        socket.emit('round_ended', {});
+        socket.emit('round_ended', {
+            currentPlayers: match.currentPlayers.map(player => ({
+                playerId: player.socket.id,
+                score: player.score
+            })),
+            waitingPlayers: match.waitingPlayers.map(player => player.socket.id)
+        });
+
         socket.removeAllListeners('typed_words');
     }
 }

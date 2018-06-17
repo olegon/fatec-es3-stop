@@ -83,44 +83,40 @@
     function update(data) {
         $("#time-left").html(data.timeLeft / 1000);
 
-        var playersChange = _players.length != data.currentPlayers.length; 
-
-        if (playersChange) {
-            _players = data.currentPlayers;
-            
-            let boxSize = _players.length < 2 ? 6 : Math.floor(12 / _players.length);
-            let boxPlayers = "";
-            
-            for (let i = 0; i < _players.length; i++){
-                if (data.currentPlayers[i].playerId == _playerId) {
-                    boxPlayers += ""
-                    +"<div class='col-md-" + boxSize + "' style='padding: 0;'>"
-                    +    "<div class='card text-white bg-info stop-player-card'>"
-                    +        "<div class='card-header'>" + data.currentPlayers[i].playerId + "<span id='score-"+data.currentPlayers[i].playerId+"' class='player-score'>Pontos: "+data.currentPlayers[i].score+"</span></div>"
-                    +        "<div class='card-body'>"
-                    +            "<div class='text-center'>"
-                    +                "<img class='stop-btn-power' src='/public/img/power-stop.png' alt='skill special stop' title='Usar poder stop.' />"
-                    +            "</div>"
-                    +        "</div>"
-                    +    "</div>"
-                    +"</div>";
-                } else {
-                    boxPlayers += ""
-                    +"<div class='col-md-" + boxSize + "' style='padding: 0;'>"
-                    +    "<div class='card stop-player-card'>"
-                    +        "<div class='card-header'>" + data.currentPlayers[i].playerId + "<span id='score-"+data.currentPlayers[i].playerId+"' class='player-score'>Pontos: "+data.currentPlayers[i].score+"&nbsp;&nbsp;<img class='stop-btn-ban-user' src='/public/img/ban-user.png' alt='ban user button' title='Banir usuário.' /></span></div>"
-                    +        "<div class='card-body'>"
-                    +            "<div class='text-center'>"
-                    +                "<img class='stop-btn-power' src='/public/img/power-freeze.png' alt='skill freeze enemy' title='Congelar jogador.' />"
-                    +            "</div>"
-                    +        "</div>"
-                    +    "</div>"
-                    +"</div>";
-                }
+        _players = data.currentPlayers;
+        
+        let boxSize = _players.length < 2 ? 6 : Math.floor(12 / _players.length);
+        let boxPlayers = "";
+        
+        for (let i = 0; i < _players.length; i++){
+            if (data.currentPlayers[i].playerId == _playerId) {
+                boxPlayers += ""
+                +"<div class='col-md-" + boxSize + "' style='padding: 0;'>"
+                +    "<div class='card text-white bg-info stop-player-card'>"
+                +        "<div class='card-header'>" + data.currentPlayers[i].playerId + "<span id='score-"+data.currentPlayers[i].playerId+"' class='player-score'>Pontos: "+data.currentPlayers[i].score+"</span></div>"
+                +        "<div class='card-body'>"
+                +            "<div class='text-center'>"
+                +                "<img class='stop-btn-power' src='/public/img/power-stop.png' alt='skill special stop' title='Usar poder stop.' />"
+                +            "</div>"
+                +        "</div>"
+                +    "</div>"
+                +"</div>";
+            } else {
+                boxPlayers += ""
+                +"<div class='col-md-" + boxSize + "' style='padding: 0;'>"
+                +    "<div class='card stop-player-card'>"
+                +        "<div class='card-header'>" + data.currentPlayers[i].playerId + "<span id='score-"+data.currentPlayers[i].playerId+"' class='player-score'>Pontos: "+data.currentPlayers[i].score+"&nbsp;&nbsp;<img class='stop-btn-ban-user' src='/public/img/ban-user.png' alt='ban user button' title='Banir usuário.' /></span></div>"
+                +        "<div class='card-body'>"
+                +            "<div class='text-center'>"
+                +                "<img class='stop-btn-power' src='/public/img/power-freeze.png' alt='skill freeze enemy' title='Congelar jogador.' />"
+                +            "</div>"
+                +        "</div>"
+                +    "</div>"
+                +"</div>";
             }
-
-            $("#current-players").html(boxPlayers);
         }
+
+        $("#current-players").html(boxPlayers);
     }
 
     function newRound(data){

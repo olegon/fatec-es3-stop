@@ -2,8 +2,6 @@ const path = require('path');
 const express = require('express');
 const socketIO = require('socket.io');
 
-
-
 module.exports = function (app, server, PubSub) {
     const {
         Room: RoomModel,
@@ -15,7 +13,8 @@ module.exports = function (app, server, PubSub) {
     const playerService = require('./services/player-service')(PubSub);
     const wordService = require('./services/word-service')();
     const roomService = require('./services/room-service')(PubSub, dbRoomService, playerService);
-    const matchService = require('./services/match-service')(PubSub, roomService);
+    const roundService = require('./services/round-service')(PubSub);
+    const matchService = require('./services/match-service')(PubSub, roundService);
 
     const io = socketIO(server);
 

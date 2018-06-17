@@ -38,7 +38,7 @@ async function startRound(PubSub, wordService, room, match) {
         });
     }
 
-    let timeLeft = match.roundDuration / 10 * 1000;
+    let timeLeft = match.roundDuration * 1000;
 
     while (timeLeft > 0) {
         for (let player of [...match.currentPlayers, ...match.waitingPlayers]) {
@@ -80,7 +80,7 @@ async function validate(wordService, room, match, socketIdToWords) {
 
         for (let category in categoryToWord) {
             const word = categoryToWord[category];
-            
+
             if (await wordService.isValid(word, category)) {
                 console.log('valid');
                 currentPlayer.score += 50;

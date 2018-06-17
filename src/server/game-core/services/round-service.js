@@ -33,12 +33,12 @@ async function startRound(PubSub, room, match, totalTime = 15000) {
     let timeLeft = totalTime;
     
     while (timeLeft > 0) {
-        for (let player of match.players) {
+        for (let player of [...match.players, ...match.waitingPlayers]) {
             const { socket } = player;
     
             socket.emit('server_timer', {
                 timeLeft,
-                players: match.players.map(player => player.socket.id),
+                currentPlayers: match.players.map(player => player.socket.id),
                 waitingPlayers: match.waitingPlayers.map(player => player.socket.id),
             });
         }

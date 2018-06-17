@@ -4,8 +4,8 @@
     const socket = io();
     let playerId;
     let currentRound = 0;
-    let numberCategories = 0;
-    let numberPlayers = 0;
+    let categories = 0;
+    let players = 0;
 
     socket.emit('join_room', {
         roomId
@@ -41,9 +41,19 @@
         console.log('new_match', data);
     });
 
+    $("#match :input").on("change", function(event){
+        let categoryId = $(this).data("category");
+        let word = $(this).val();
+        
+        socket.emit('word_typed', {
+            category_id: categoryId,
+            word: word
+        });
+    });
+
     function init(data){
         playerId = data.room.playerId;
-        numberCategories = data.room.categories.length;
+        categories = data.room.categories;
         
         $("#room-name").html(data.room.name);
         $("#player-id").html(data.room.playerId);
@@ -74,15 +84,15 @@
     function update(data) {
         $("#time-left").html(data.timeLeft / 1000);
 
-        var playersChange = numberPlayers != data.currentPlayers.length; 
+        var playersChange = players.lenght != data.currentPlayers.length; 
 
         if (playersChange) {
-            numberPlayers = data.currentPlayers.length;
+            players = data.currentPlayers;
             
-            let boxSize = numberPlayers < 2 ? 6 : (12 / numberPlayers);
+            let boxSize = players.lenght < 2 ? 6 : (12 / players.lenght);
             let boxPlayers = "";
             
-            for (let i = 0; i < numberPlayers; i++){
+            for (let i = 0; i < players.lenght; i++){
                 boxPlayers += ""
                 +"<div class='col-md-" + boxSize + "' style='padding: 0;'>"
                 +    "<div class='card stop-player-card'>"
@@ -115,8 +125,8 @@
         lineCategory += "<tr>";
         lineCategory += "<td><input type='text' class='form-control' value='" + data.letter + "' disabled='disabled'></td>";
         
-        for (var i = 0; i < numberCategories; i++) {
-            lineCategory += "<td><input type='text' class='form-control' placeholder='" + data.letter + "...'></td>";
+        for (var i = 0; i < categories.length; i++) {
+            lineCategory += "<td><input type='text' class='form-control' data-category='" + categories[i]._id + "'data-letter='" + data.letter + "' placeholder='" + data.letter + "...'></td>";
         }
 
         lineCategory += "<td>00,00</td>";

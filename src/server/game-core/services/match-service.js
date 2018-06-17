@@ -16,7 +16,7 @@ function service (PubSub, dbGameParametersService, roundService) {
 
 async function prepareMatch(PubSub, dbGameParametersService, room) {
     console.log(`# preparing new match for room: ${room.dbRoom._id}`);
-
+    
     const gameParamaters = await dbGameParametersService.getGameParamaters();
 
     const match = {

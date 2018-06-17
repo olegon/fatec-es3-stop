@@ -51,7 +51,10 @@ async function startRound(PubSub, wordService, room, match) {
 
             socket.emit('server_timer', {
                 timeLeft,
-                currentPlayers: match.currentPlayers.map(player => player.socket.id),
+                currentPlayers: match.currentPlayers.map(player => ({
+                    playerId: player.socket.id,
+                    score: player.score
+                })),
                 waitingPlayers: match.waitingPlayers.map(player => player.socket.id),
             });
         }

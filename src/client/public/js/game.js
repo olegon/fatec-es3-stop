@@ -3,7 +3,6 @@
     
     const socket = io();
     let playerId;
-    let currentRound = 0;
     let categories = 0;
     let players = 0;
 
@@ -84,27 +83,40 @@
     function update(data) {
         $("#time-left").html(data.timeLeft / 1000);
 
-        var playersChange = players.lenght != data.currentPlayers.length; 
+        var playersChange = players.length != data.currentPlayers.length; 
 
         if (playersChange) {
             players = data.currentPlayers;
             
-            let boxSize = players.lenght < 2 ? 6 : (12 / players.lenght);
+            let boxSize = players.length < 2 ? 6 : Math.floor(12 / players.length);
             let boxPlayers = "";
             
-            for (let i = 0; i < players.lenght; i++){
-                boxPlayers += ""
-                +"<div class='col-md-" + boxSize + "' style='padding: 0;'>"
-                +    "<div class='card stop-player-card'>"
-                +        "<div class='card-header'>" + data.currentPlayers[i] + "<span class='player-score'>Pontos: 20&nbsp;&nbsp;<img class='stop-btn-ban-user' src='/public/img/ban-user.png' alt='ban user button' title='Banir usuário.' /></span></div>"
-                +        "<div class='card-body'>"
-                +            "<div class='text-center'>"
-                //+                "<img class='stop-btn-power' src='/public/img/power-stop.png' alt='skill special stop' title='Usar poder stop.' />"
-                +                "<img class='stop-btn-power' src='/public/img/power-freeze.png' alt='skill freeze enemy' title='Congelar jogador.' />"
-                +            "</div>"
-                +        "</div>"
-                +    "</div>"
-                +"</div>";
+            for (let i = 0; i < players.length; i++){
+                if (data.currentPlayers[i] == playerId) {
+                    boxPlayers += ""
+                    +"<div class='col-md-" + boxSize + "' style='padding: 0;'>"
+                    +    "<div class='card text-white bg-info stop-player-card'>"
+                    +        "<div class='card-header'>" + data.currentPlayers[i] + "<span class='player-score'>Pontos: 20</span></div>"
+                    +        "<div class='card-body'>"
+                    +            "<div class='text-center'>"
+                    +                "<img class='stop-btn-power' src='/public/img/power-stop.png' alt='skill special stop' title='Usar poder stop.' />"
+                    +            "</div>"
+                    +        "</div>"
+                    +    "</div>"
+                    +"</div>";
+                } else {
+                    boxPlayers += ""
+                    +"<div class='col-md-" + boxSize + "' style='padding: 0;'>"
+                    +    "<div class='card stop-player-card'>"
+                    +        "<div class='card-header'>" + data.currentPlayers[i] + "<span class='player-score'>Pontos: 20&nbsp;&nbsp;<img class='stop-btn-ban-user' src='/public/img/ban-user.png' alt='ban user button' title='Banir usuário.' /></span></div>"
+                    +        "<div class='card-body'>"
+                    +            "<div class='text-center'>"
+                    +                "<img class='stop-btn-power' src='/public/img/power-freeze.png' alt='skill freeze enemy' title='Congelar jogador.' />"
+                    +            "</div>"
+                    +        "</div>"
+                    +    "</div>"
+                    +"</div>";
+                }
             }
 
             $("#current-players").html(boxPlayers);
@@ -112,13 +124,11 @@
     }
 
     function newRound(data){
-        currentRound += 1;
-
         $("#match").show();
         $("#waiting-players").hide();
 
         $("#current-letter").html(data.letter);
-        $("#current-round").html(currentRound);
+        $("#current-round").html(data.currentRound);
 
         let lineCategory;
 
@@ -129,9 +139,10 @@
             lineCategory += "<td><input type='text' class='form-control' data-category='" + categories[i]._id + "'data-letter='" + data.letter + "' placeholder='" + data.letter + "...'></td>";
         }
 
-        lineCategory += "<td>00,00</td>";
+        lineCategory += "<td><a type='button' class='btn btn-primary btn-xs' href=''>STOP!</a></td>";
         lineCategory += "</tr>";
 
+        $("#table-game tbody tr:last-child td:last-child").html("00,00");
         $("#table-game tbody tr:last-child :input").attr("disabled", true);
         $("#table-game tbody").append(lineCategory);
     }

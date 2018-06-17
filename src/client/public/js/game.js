@@ -41,11 +41,11 @@
         console.log('new_match', data);
     });
 
-    $("#match :input").on("change", function(event){
+    $("#match").on("change", "input", function(event){
         let categoryId = $(this).data("category");
         let word = $(this).val();
         
-        socket.emit('word_typed', {
+        socket.emit('typed_word', {
             category_id: categoryId,
             word: word
         });

@@ -16,7 +16,7 @@ function service (PubSub, dbGameParametersService, roundService) {
 
 async function prepareMatch(PubSub, dbGameParametersService, room) {
     console.log(`# preparing new match for room: ${room.dbRoom._id}`);
-    
+
     const gameParamaters = await dbGameParametersService.getGameParamaters();
 
     const match = {
@@ -71,7 +71,10 @@ async function startMatch(PubSub, room, match, roundService) {
         const { socket } = player;
 
         socket.emit('new_match', {
-            players: match.currentPlayers.map(player => player.socket.id),
+            players: match.currentPlayers.map(player => ({
+                playerId: player.socket.id,
+                score: player.score
+            })),
             waitingPlayers: match.waitingPlayers.map(player => player.socket.id),
         });
     });

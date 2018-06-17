@@ -15,8 +15,6 @@ function service(PubSub, dbRoomService, playerService) {
             const { id } = socket;
             const { roomId } = parameters;
 
-            console.log(`# player ${id} wants to join room ${roomId}`);
-
             const dbRoom = await dbRoomService.getRoomById(roomId);
 
             const player = playerService.getPlayerBySocket(socket);

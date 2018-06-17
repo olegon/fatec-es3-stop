@@ -8,16 +8,13 @@ function service(PubSub) {
     return {
         connect (socket) {
             const newPlayer = {
-                socket
+                socket,
+                score: 0
             };
 
             players.push(newPlayer);
 
             PubSub.publish(constants.PLAYER_CONNECTED_MESSAGE, newPlayer);
-        },
-
-        getPlayers () {
-            return [...players];
         },
 
         getPlayerBySocket(socket) {

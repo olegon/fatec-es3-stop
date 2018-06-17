@@ -1,6 +1,6 @@
 module.exports = service;
 
-function service(dbWorkService) {
+function service(dbWordService) {
 
     return {
         async isValid (word, category) {

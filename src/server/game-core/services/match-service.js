@@ -82,6 +82,9 @@ async function startMatch(PubSub, room, match, roundService) {
         await roundService.startRound(room, match);
 
         console.log(`# ending round ${match.currentRound}`);
+
+        match.players = room.players;
+        match.waitingPlayers = [];
     }
     
     console.log('# ending match');

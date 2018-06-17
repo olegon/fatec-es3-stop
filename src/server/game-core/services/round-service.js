@@ -1,6 +1,8 @@
 const constants = require('./constants');
 const { choice, delay, removeElementInPlace } = require('../util');
 
+const SERVER_TICK_IN_MS = 1000;
+
 module.exports = service;
 
 function service (PubSub) {
@@ -11,7 +13,7 @@ function service (PubSub) {
     }
 }
 
-async function startRound(PubSub, room, match) {
+async function startRound(PubSub, room, match, totalTime = 15000) {
     const letter = choice(match.availableLetters);
     removeElementInPlace(match.availableLetters, element => element === letter);
 
@@ -23,10 +25,34 @@ async function startRound(PubSub, room, match) {
             currentRound: match.currentRound,
         });
 
-        console.log(socket.id);
+        socket.on('typed_words', (data) => {
+            console.log(data);
+        });
     }
+
+    let timeLeft = totalTime;
     
-    return await delay(5000);
+    while (timeLeft > 0) {
+        for (let player of match.players) {
+            const { socket } = player;
+    
+            socket.emit('server_timer', {
+                timeLeft,
+                players: match.players.map(player => player.socket.id),
+                waitingPlayers: match.waitingPlayers.map(player => player.socket.id),
+            });
+        }
+
+        timeLeft -= SERVER_TICK_IN_MS;
+
+        await delay(SERVER_TICK_IN_MS);
+    }
+
+    for (let player of match.players) {
+        const { socket } = player;
+
+        socket.removeAllListeners('typed_words');
+    }
 }
 
 

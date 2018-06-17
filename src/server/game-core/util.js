@@ -1,13 +1,30 @@
-const events = require('events');
+module.exports.delay = delay;
+module.exports.choice = choice;
+module.exports.removeElementInPlace = removeElementInPlace;
 
-module.exports.bindEvent = bindEvent;
+function delay(timeout) {
+    return new Promise(res => {
+        setTimeout(res, timeout, timeout);
+    });
+}
 
-function bindEvent(eventEmitter, eventName, listener) {
-    eventEmitter.on(eventName, listener);
-    
-    return {
-        clear() {
-            eventEmitter.removeListener(eventName, listener);
+function choice(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
+function removeElementInPlace(array, predicate) {
+    let index = -1;
+
+    for (let i = 0; i < array.length; i++) {
+        const element = array[i];
+        
+        if (predicate(element)) {
+            index = i;
+            break;
         }
-    };
+    }
+
+    if (index > -1) {
+        array.splice(index, 1);
+    }
 }

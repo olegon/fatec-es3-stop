@@ -46,3 +46,8 @@ h3.styled {
 .stop-player-card {
     background-color: #e8e8e8;
 }
+
+.stop-player-card .player-score {
+    text-align: right;
+    font-weight: 500;
+}

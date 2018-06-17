@@ -5,7 +5,7 @@ const SERVER_TICK_IN_MS = 1000;
 
 module.exports = service;
 
-function service (PubSub) {
+function service(PubSub) {
     return {
         async startRound(room, match) {
             return await startRound(PubSub, room, match);
@@ -13,11 +13,13 @@ function service (PubSub) {
     }
 }
 
-async function startRound(PubSub, room, match, totalTime = 15000) {
+async function startRound(PubSub, room, match) {
     const letter = choice(match.availableLetters);
     removeElementInPlace(match.availableLetters, element => element === letter);
 
-    for (let player of match.players) {
+    const wordsOfRound = {};
+
+    for (let player of match.currentPlayers) {
         const { socket } = player;
 
         socket.emit('new_round', {
@@ -26,19 +28,21 @@ async function startRound(PubSub, room, match, totalTime = 15000) {
         });
 
         socket.on('typed_words', (data) => {
-            console.log(data);
+            wordsOfRound[socket.id] = data;
+
+            console.log(wordsOfRound);
         });
     }
 
-    let timeLeft = totalTime;
-    
+    let timeLeft = match.roundDuration * 1000;
+
     while (timeLeft > 0) {
-        for (let player of [...match.players, ...match.waitingPlayers]) {
+        for (let player of [...match.currentPlayers, ...match.waitingPlayers]) {
             const { socket } = player;
-    
+
             socket.emit('server_timer', {
                 timeLeft,
-                currentPlayers: match.players.map(player => player.socket.id),
+                currentPlayers: match.currentPlayers.map(player => player.socket.id),
                 waitingPlayers: match.waitingPlayers.map(player => player.socket.id),
             });
         }
@@ -48,7 +52,7 @@ async function startRound(PubSub, room, match, totalTime = 15000) {
         await delay(SERVER_TICK_IN_MS);
     }
 
-    for (let player of match.players) {
+    for (let player of match.currentPlayers) {
         const { socket } = player;
 
         socket.removeAllListeners('typed_words');

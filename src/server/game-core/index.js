@@ -5,16 +5,19 @@ const socketIO = require('socket.io');
 module.exports = function (app, server, PubSub) {
     const {
         Room: RoomModel,
-        Word: WordModel
+        Word: WordModel,
+        GameParameters: GameParametersModel
     } = require('../api/models');
+
     const dbRoomService = require('../services/room-service')(RoomModel);
     const dbWordService = require('../services/word-service')(WordModel);
+    const dbGameParametersService = require('../services/gameparameters-service')(GameParametersModel);
 
     const playerService = require('./services/player-service')(PubSub);
     const wordService = require('./services/word-service')();
     const roomService = require('./services/room-service')(PubSub, dbRoomService, playerService);
     const roundService = require('./services/round-service')(PubSub);
-    const matchService = require('./services/match-service')(PubSub, roundService);
+    const matchService = require('./services/match-service')(PubSub, dbGameParametersService, roundService);
 
     const io = socketIO(server);
 

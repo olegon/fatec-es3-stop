@@ -18,7 +18,7 @@ module.exports = function (app, server, PubSub) {
     const playerService = require('./services/player-service')(PubSub);
     const wordService = require('./services/word-service')(dbWordService, dbSuggestedWordService);
     const roomService = require('./services/room-service')(PubSub, dbRoomService, playerService);
-    const roundService = require('./services/round-service')(PubSub, wordService);
+    const roundService = require('./services/round-service')(PubSub, wordService, playerService);
     const matchService = require('./services/match-service')(PubSub, dbGameParametersService, roundService);
 
     const io = socketIO(server);

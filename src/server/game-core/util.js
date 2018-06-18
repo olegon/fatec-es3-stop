@@ -35,6 +35,7 @@ function internalPlayerRepresentationToSocketRepresentation({ socket, score, mp,
         playerId: socket.id,
         score,
         mp,
-        frozen: frozenInMs > 0
+        frozen: frozenInMs > 0,
+        canCastFrostPlayer: mp >= 100
     };
 }

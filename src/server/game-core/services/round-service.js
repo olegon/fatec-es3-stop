@@ -10,15 +10,15 @@ const SERVER_TICK_IN_MS = 1000;
 
 module.exports = service;
 
-function service(PubSub, wordService) {
+function service(PubSub, wordService, playerService) {
     return {
         async startRound(room, match) {
-            return await startRound(PubSub, wordService, room, match);
+            return await startRound(PubSub, wordService, playerService, room, match);
         }
     }
 }
 
-async function startRound(PubSub, wordService, room, match) {
+async function startRound(PubSub, wordService, playerService, room, match) {
     let timeLeft = match.roundDuration * 1000;
     let stopRequested = false;
     const letter = choice(match.availableLetters);
@@ -64,6 +64,23 @@ async function startRound(PubSub, wordService, room, match) {
 
             stopRequested = stopRequested === false && canStop;
         });
+
+        socket.on('spell_frost_player', (frostPlayerEvent) => {
+            const { targetId } = frostPlayerEvent;
+
+            const sourcePlayer = playerService.getPlayerBySocket(socket);
+            const targetPlayer = match.currentPlayer.find(player => player.socket.id === targetId);
+            
+            if (sourcePlayer && targetPlayer) {
+                if (sourcePlayer.mp >= 100) {
+                    sourcePlayer.mp -= 100;
+                    targetPlayer.frozenInMs += 5000;
+                }
+            }
+            else {
+                console.error('# spell_frost_player: target or source player not found.');
+            }
+        });
     }
 
 
@@ -83,6 +100,10 @@ async function startRound(PubSub, wordService, room, match) {
 
         timeLeft -= SERVER_TICK_IN_MS;
 
+        for (let player of match.currentPlayers) {
+            player.frozenInMs -= SERVER_TICK_IN_MS;
+        }
+
         await delay(SERVER_TICK_IN_MS);
     }
 
@@ -99,6 +120,7 @@ async function startRound(PubSub, wordService, room, match) {
 
         socket.removeAllListeners('typed_words');
         socket.removeAllListeners('stop_request');
+        socket.removeAllListeners('spell_frost_player');
     }
 }
 
@@ -117,6 +139,7 @@ async function validate(wordService, room, match, letter, socketIdToWords) {
 
             if (await wordService.isValid(word, category, letter)) {
                 currentPlayer.score += 50;
+                currentPlayer.mp += 50;
             }
         }
     }

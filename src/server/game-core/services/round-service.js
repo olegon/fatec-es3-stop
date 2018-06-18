@@ -19,6 +19,8 @@ function service(PubSub, wordService) {
 }
 
 async function startRound(PubSub, wordService, room, match) {
+    let timeLeft = match.roundDuration * 1000;
+    let stopRequested = false;
     const letter = choice(match.availableLetters);
     removeElementInPlace(match.availableLetters, element => element === letter);
 
@@ -43,11 +45,29 @@ async function startRound(PubSub, wordService, room, match) {
 
             console.log(wordsOfRound);
         });
+
+        socket.on('stop_request', (data) => {
+            wordsOfRound[socket.id] = wordsOfRound[socket.id] || {};
+            
+            let canStop = true;
+
+            const { dbRoom } = room;
+
+            for (let category of dbRoom.categories) {
+                if (wordsOfRound[socket.id] == null || wordsOfRound[socket.id] [category._id] == null) {
+                    canStop = false;
+                    break;
+                }
+            }
+
+            console.log(`# is stop request valid ? ${canStop}`);
+
+            stopRequested = stopRequested === false && canStop;
+        });
     }
 
-    let timeLeft = match.roundDuration * 1000;
 
-    while (timeLeft > 0) {
+    while (timeLeft > 0 && stopRequested === false) {
         for (let player of [...match.currentPlayers, ...match.waitingPlayers]) {
             const { socket } = player;
 
@@ -73,10 +93,12 @@ async function startRound(PubSub, wordService, room, match) {
         
         socket.emit('round_ended', {
             currentPlayers: match.currentPlayers.map(internalPlayerRepresentationToSocketRepresentation),
-            waitingPlayers: match.waitingPlayers.map(player => player.socket.id)
+            waitingPlayers: match.waitingPlayers.map(player => player.socket.id),
+            stopRequested: stopRequested
         });
 
         socket.removeAllListeners('typed_words');
+        socket.removeAllListeners('stop_request');
     }
 }
 

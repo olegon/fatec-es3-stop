@@ -6,15 +6,17 @@ module.exports = function (app, server, PubSub) {
     const {
         Room: RoomModel,
         Word: WordModel,
-        GameParameters: GameParametersModel
+        GameParameters: GameParametersModel,
+        SuggestedWord: SuggestedWordModel
     } = require('../api/models');
 
     const dbRoomService = require('../services/room-service')(RoomModel);
     const dbWordService = require('../services/word-service')(WordModel);
+    const dbSuggestedWordService = require('../services/suggested-word-service')(SuggestedWordModel);
     const dbGameParametersService = require('../services/gameparameters-service')(GameParametersModel);
 
     const playerService = require('./services/player-service')(PubSub);
-    const wordService = require('./services/word-service')(dbWordService);
+    const wordService = require('./services/word-service')(dbWordService, dbSuggestedWordService);
     const roomService = require('./services/room-service')(PubSub, dbRoomService, playerService);
     const roundService = require('./services/round-service')(PubSub, wordService);
     const matchService = require('./services/match-service')(PubSub, dbGameParametersService, roundService);

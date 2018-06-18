@@ -1,6 +1,6 @@
 module.exports = service;
 
-function service(dbWordService) {
+function service(dbWordService, dbSuggestedWordService) {
 
     return {
         async isValid (typedWord, category, letter) {
@@ -28,6 +28,13 @@ function service(dbWordService) {
 
             for (let word of words) {
                 if (word.active && word.category._id == category) return true;
+            }
+
+            try {
+                await dbSuggestedWordService.addWord(typedWord, category);
+            }
+            catch (err) {
+                console.error('# error while adding suggested word: ', err && err.message);
             }
 
             return false;

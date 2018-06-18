@@ -1,14 +1,16 @@
-const events = require('events');
-const util = require('../util');
-
 const constants = require('./constants');
+const {
+    internalPlayerRepresentationToSocketRepresentation
+} = require('../util');
+
 
 module.exports = service;
 
 function service(PubSub, dbRoomService, playerService) {
     const runningRooms = {};
 
-    registerToPlayerDisconnectTopic(PubSub, runningRooms);
+    registerToPlayerDisconnetedEvent(PubSub, runningRooms);
+    registerToGameDetroyEvent(PubSub, runningRooms);
 
     return {
         async join(socket, parameters) {
@@ -36,7 +38,7 @@ function service(PubSub, dbRoomService, playerService) {
     }
 }
 
-function registerToPlayerDisconnectTopic(PubSub, runningRooms) {
+function registerToPlayerDisconnetedEvent(PubSub, runningRooms) {
     PubSub.subscribe(constants.PLAYER_DISCONNECTED_MESSAGE, function (msg, player) {
         Object.entries(runningRooms)
             .forEach(([roomId, room]) => {
@@ -54,6 +56,20 @@ function registerToPlayerDisconnectTopic(PubSub, runningRooms) {
     });
 }
 
+function registerToGameDetroyEvent (PubSub, runningRooms) {
+    PubSub.subscribe(constants.ROOM_DESTROY_MESSAGE, function (msg, { room }) {
+        // const { dbRoom } = room;
+
+        // dbRoom.active = false;
+        // dbRoom.reason = 'O jogo finalizou.';
+
+        // dbRoom
+        // .save()
+        // .then(console.log)
+        // .catch(console.error);
+    });
+}
+
 function handleRoomNotFound(socket) {
     socket.emit('room_not_found', {});
 }
@@ -61,7 +77,8 @@ function handleRoomNotFound(socket) {
 function handleRoomNotActive(socket, dbRoom) {
     const roomToEmit = {
         _id: dbRoom._id,
-        name: dbRoom.name
+        name: dbRoom.name,
+        reason: dbRoom.reason
     };
 
     socket.emit('room_not_active', {
@@ -85,11 +102,7 @@ function handleRoomFound(PubSub, player, dbRoom, roomsInGame) {
 
     const roomInGame = roomsInGame[roomId];
 
-    const playersToEmit = roomInGame.players
-        .map(player => ({
-            playerId: player.socket.id,
-            points: 0
-        }));
+    const playersToEmit = roomInGame.players.map(internalPlayerRepresentationToSocketRepresentation);
 
     const roomToEmit = {
         _id: dbRoom._id,

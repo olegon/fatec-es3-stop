@@ -1,6 +1,7 @@
 module.exports.delay = delay;
 module.exports.choice = choice;
 module.exports.removeElementInPlace = removeElementInPlace;
+module.exports.internalPlayerRepresentationToSocketRepresentation = internalPlayerRepresentationToSocketRepresentation;
 
 function delay(timeout) {
     return new Promise(res => {
@@ -27,4 +28,13 @@ function removeElementInPlace(array, predicate) {
     if (index > -1) {
         array.splice(index, 1);
     }
+}
+
+function internalPlayerRepresentationToSocketRepresentation({ socket, score, mp, frozenInMs }) {
+    return {
+        playerId: socket.id,
+        score,
+        mp,
+        frozen: frozenInMs > 0
+    };
 }

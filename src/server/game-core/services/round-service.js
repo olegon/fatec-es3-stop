@@ -1,5 +1,10 @@
 const constants = require('./constants');
-const { choice, delay, removeElementInPlace } = require('../util');
+const {
+    choice,
+    delay,
+    removeElementInPlace,
+    internalPlayerRepresentationToSocketRepresentation
+} = require('../util');
 
 const SERVER_TICK_IN_MS = 1000;
 
@@ -27,10 +32,7 @@ async function startRound(PubSub, wordService, room, match) {
         socket.emit('new_round', {
             letter: letter,
             currentRound: match.currentRound,
-            currentPlayers: match.currentPlayers.map(player => ({
-                playerId: player.socket.id,
-                score: player.score
-            })),
+            currentPlayers: match.currentPlayers.map(internalPlayerRepresentationToSocketRepresentation),
             waitingPlayers: match.waitingPlayers.map(player => player.socket.id)
         });
 
@@ -51,10 +53,10 @@ async function startRound(PubSub, wordService, room, match) {
 
             socket.emit('server_timer', {
                 timeLeft,
-                currentPlayers: match.currentPlayers.map(player => ({
-                    playerId: player.socket.id,
-                    score: player.score
-                })),
+                currentRound: match.currentRound,
+                rounds: match.rounds,
+                letter,
+                currentPlayers: match.currentPlayers.map(internalPlayerRepresentationToSocketRepresentation),
                 waitingPlayers: match.waitingPlayers.map(player => player.socket.id),
             });
         }
@@ -68,12 +70,9 @@ async function startRound(PubSub, wordService, room, match) {
 
     for (let player of match.currentPlayers) {
         const { socket } = player;
-
+        
         socket.emit('round_ended', {
-            currentPlayers: match.currentPlayers.map(player => ({
-                playerId: player.socket.id,
-                score: player.score
-            })),
+            currentPlayers: match.currentPlayers.map(internalPlayerRepresentationToSocketRepresentation),
             waitingPlayers: match.waitingPlayers.map(player => player.socket.id)
         });
 

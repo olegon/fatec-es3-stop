@@ -9,7 +9,9 @@ function service(PubSub) {
         connect (socket) {
             const newPlayer = {
                 socket,
-                score: 0
+                score: 0,
+                mp: 0,
+                frozenInMs: 0
             };
 
             players.push(newPlayer);

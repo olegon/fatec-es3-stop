@@ -1,4 +1,7 @@
 const constants = require('./constants');
+const {
+    internalPlayerRepresentationToSocketRepresentation
+} = require('../util');
 
 module.exports = service;
 
@@ -28,8 +31,8 @@ async function prepareMatch(PubSub, dbGameParametersService, room) {
         waitingPlayers: [...room.players]
     };
 
-    PubSub.subscribe(constants.ROOM_PLAYER_JOIN_MESSAGE, (msg, { player, room: destinationRoom }) => {
-        if (room === destinationRoom) {
+    function roomPlayerJoinMessageListener (msg, { player, room: originRoom }) {
+        if (room === originRoom) {
             match.waitingPlayers.push(player);
 
             if (room.status === constants.ROOM_STATUS_WAITING_FOR_PLAYERS && match.waitingPlayers.length >= 2) {
@@ -44,9 +47,9 @@ async function prepareMatch(PubSub, dbGameParametersService, room) {
                 });
             }
         }
-    });
+    }
 
-    PubSub.subscribe(constants.ROOM_PLAYER_LEFT_MESSAGE, (msg, { player, room: originRoom }) => {
+    function roomPlayerLeftMessageListener (msg, { player, room: originRoom }) {
         if (room === originRoom) {
             const playerIndex = match.currentPlayers.indexOf(player);
 
@@ -60,7 +63,23 @@ async function prepareMatch(PubSub, dbGameParametersService, room) {
                 match.waitingPlayers.splice(waitingPlayerIndex, 1);
             }
         }
-    });
+    }
+
+    function matchEntenderMessageListener ({ room: originRoom, match }) {
+        console.log('# cleaning prepare match events ');
+
+        PubSub.unsubscribe(roomPlayerJoinMessageListener);
+        PubSub.unsubscribe(roomPlayerLeftMessageListener);
+        PubSub.unsubscribe(matchEntenderMessageListener);
+
+        PubSub.publish(constants.ROOM_DESTROY_MESSAGE, { room });
+    }
+
+    PubSub.subscribe(constants.ROOM_PLAYER_JOIN_MESSAGE, roomPlayerJoinMessageListener);
+    
+    PubSub.subscribe(constants.ROOM_PLAYER_LEFT_MESSAGE, roomPlayerLeftMessageListener);
+
+    PubSub.subscribe(constants.MATCH_ENDED_MESSAGE, matchEntenderMessageListener);
 
 }
 
@@ -71,10 +90,7 @@ async function startMatch(PubSub, room, match, roundService) {
         const { socket } = player;
 
         socket.emit('new_match', {
-            players: match.currentPlayers.map(player => ({
-                playerId: player.socket.id,
-                score: player.score
-            })),
+            players: match.currentPlayers.map(internalPlayerRepresentationToSocketRepresentation),
             waitingPlayers: match.waitingPlayers.map(player => player.socket.id),
         });
     });
@@ -96,9 +112,11 @@ async function startMatch(PubSub, room, match, roundService) {
         const { socket } = player;
 
         socket.emit('match_ended', {
-            players: match.currentPlayers.map(player => player.socket.id),
+            players: match.currentPlayers.map(internalPlayerRepresentationToSocketRepresentation),
             waitingPlayers: match.waitingPlayers.map(player => player.socket.id),
         });
     });
+
+    PubSub.publish(constants.MATCH_ENDED_MESSAGE, { room, match });
 }
 

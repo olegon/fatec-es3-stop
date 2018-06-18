@@ -64,7 +64,7 @@ async function startRound(PubSub, wordService, room, match) {
         await delay(SERVER_TICK_IN_MS);
     }
 
-    await validate(wordService, room, match, wordsOfRound);
+    await validate(wordService, room, match, letter, wordsOfRound);
 
     for (let player of match.currentPlayers) {
         const { socket } = player;
@@ -81,7 +81,7 @@ async function startRound(PubSub, wordService, room, match) {
     }
 }
 
-async function validate(wordService, room, match, socketIdToWords) {
+async function validate(wordService, room, match, letter, socketIdToWords) {
     for (let socketId in socketIdToWords) {
         const categoryToWord = socketIdToWords[socketId];
 
@@ -94,7 +94,7 @@ async function validate(wordService, room, match, socketIdToWords) {
             
             console.log(`${socketId} sent word ${word} of category ${category}`);
 
-            if (await wordService.isValid(word, category)) {
+            if (await wordService.isValid(word, category, letter)) {
                 currentPlayer.score += 50;
             }
         }

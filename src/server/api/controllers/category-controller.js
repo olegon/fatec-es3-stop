@@ -17,11 +17,11 @@ exports.get = (req, res) => {
 
 exports.post = (req, res) => {
     const category = new Category(req.body);
-
+    
     category
         .save()
         .then(() => {
-            res.status(200).json({ message: "Categoria cadastrada com sucesso" });    
+            res.status(200).json(category);    
         })
         .catch(err => {
             res.status(500).json({ message: "Falha ao cadastrar categoria", 

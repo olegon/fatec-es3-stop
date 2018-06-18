@@ -100,6 +100,5 @@ async function startMatch(PubSub, room, match, roundService) {
             waitingPlayers: match.waitingPlayers.map(player => player.socket.id),
         });
     });
-    
 }
 

@@ -29,7 +29,9 @@
     });
 
     socket.on('room_not_active', (data) => {
-        console.log('roomt_not_active', data);
+        roomNotActive(data);
+        
+        console.log('room_not_active', data);
     });
 
     socket.on('round_ended', (data) => {
@@ -64,6 +66,12 @@
         });
     });
 
+    $("#match #table-game").on("click", "#request-stop", function(event){
+        event.preventDefault();
+        debugger;
+        socket.emit('stop_request');
+    });
+
     function init(data){
         _playerId = data.room.playerId;
         _categories = data.room.categories;
@@ -93,6 +101,8 @@
 
     function update(data) {
         $("#time-left").html(data.timeLeft / 1000);
+        $("#current-letter").html(data.letter);
+        $("#current-round").html(data.currentRound + " / " + data.rounds);
 
         _players = data.currentPlayers;
         updatePlayers();
@@ -102,11 +112,8 @@
         $("#game-message").hide();
         $("#match").show();
 
-        $("#current-letter").html(data.letter);
-        $("#current-round").html(data.currentRound);
-
         data.currentPlayers.forEach(element => {
-            $("score-"+element.playerId).html("Pontos: " + element.score);
+            $("score-" + element.playerId).html("Pontos: " + element.score);
         });
 
         let lineCategory;
@@ -118,7 +125,7 @@
             lineCategory += "<td><input type='text' class='form-control' data-category='" + _categories[i]._id + "'data-letter='" + data.letter + "' placeholder='" + data.letter + "...'></td>";
         }
 
-        lineCategory += "<td><a type='button' class='btn btn-primary btn-xs' href=''>STOP!</a></td>";
+        lineCategory += "<td><a id='request-stop' type='button' class='btn btn-primary btn-xs' href='#'>STOP!</a></td>";
         lineCategory += "</tr>";
 
         
@@ -136,8 +143,16 @@
         $("#table-game tbody tr:last-child :input").attr("disabled", true);
     }
 
+    function roomNotActive(data) {
+        $("#game-message").html(`
+        <h4 style="padding-top: 20px;">Infelizmente a partida acabou!</h4>
+        <img src="/public/img/emoji-triste.png" style="width: 30vh; padding-top: 20px;" />`);
+        $("#game-message").show();
+        $("#match").hide();
+    }
+
     function matchEnded(data) {
-        const winner = _players.reduce(function(prev, current) {
+        const winner = data.players.reduce(function(prev, current) {
             return (prev.score > current.score) ? prev : current
         });
         

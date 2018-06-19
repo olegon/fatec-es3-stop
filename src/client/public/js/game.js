@@ -116,7 +116,7 @@
             headerCategories += "<th>" + element.name + "</th>";
         });
 
-        headerCategories += "<th>Total</th>";
+        headerCategories += "<th>Total Parcial</th>";
         headerCategories += "</tr>";
 
         $("#table-game .thead-light").append(headerCategories);
@@ -168,7 +168,6 @@
 
         lineCategory += "<td><a id='request-stop' type='button' class='btn btn-primary btn-xs' href='#'>STOP!</a></td>";
         lineCategory += "</tr>";
-
         
         $("#table-game tbody").append(lineCategory);
     }

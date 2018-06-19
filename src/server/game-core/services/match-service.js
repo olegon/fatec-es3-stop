@@ -67,20 +67,10 @@ async function prepareMatch(PubSub, dbGameParametersService, room) {
 
     function matchEndedMessageListener({ room: originRoom, match }) {
         console.log('# cleaning prepare match events ');
-        
+
         PubSub.unsubscribe(roomPlayerJoinMessageListener);
         PubSub.unsubscribe(roomPlayerLeftMessageListener);
         PubSub.unsubscribe(matchEndedMessageListener);
-
-        const { dbRoom } = originRoom;
-
-        dbRoom.active = false;
-        dbRoom.reason = 'O jogo finalizou.';
-
-        dbRoom
-            .save()
-            .then(console.log)
-            .catch(console.error);
     }
 
     PubSub.subscribe(constants.ROOM_PLAYER_JOIN_MESSAGE, roomPlayerJoinMessageListener);
@@ -124,6 +114,22 @@ async function startMatch(PubSub, room, match, roundService) {
             waitingPlayers: match.waitingPlayers.map(player => player.socket.id),
         });
     });
+
+    try {
+        const { dbRoom } = room;
+
+        dbRoom.active = false;
+        dbRoom.reason = 'O jogo finalizou.';
+
+        dbRoom
+            .save()
+            .then(console.log)
+            .catch(console.error);
+    }
+    catch (err) {
+        console.error(err);
+    }
+
 
     PubSub.publish(constants.MATCH_ENDED_MESSAGE, { room, match });
 }

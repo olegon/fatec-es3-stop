@@ -237,7 +237,7 @@
             } else {
                 boxPlayers += `
                 <div class="col-md-` + boxSize + `" style="padding: 0;">
-                    <div class="card stop-player-card">
+                    <div class="card stop-player-card ${_players[i].frozen ? 'player-is-frozen' : ''} ">
                         <div class="card-header">` + _players[i].userName + `<span id="score-` + _players[i].playerId + `" class="player-score">Pontos: ` + _players[i].score + `&nbsp;&nbsp;<img class="stop-btn-ban-user" src="/public/img/ban-user.png" alt="ban user button" title="Banir usuário." /></span></div>
                         <div class="card-body">
                             <div class="text-center" style="display: ${_player.canCastFrostPlayer ? 'inline' : 'none'};">

@@ -62,6 +62,11 @@ h3.styled {
     animation-fill-mode: backwards;
 }
 
+.player-is-frozen {
+    background-image: url('/public/img/ice_background.jpg');
+    background-clip: unset;
+}
+
 @keyframes confusion-frames {
     0% {
         transform: rotate(0deg);

@@ -134,10 +134,12 @@
 
         if (_player.frozen) {
             $("#div-frozen").show();
+            $("#match").hide();
         } else {
             $("#div-frozen").hide();
+            $("#match").show();
         }
-
+        
         if (_player.confused) {
             $('body').addClass('confusion-applied');
         }

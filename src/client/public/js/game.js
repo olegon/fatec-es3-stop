@@ -231,7 +231,7 @@
                         <div class="card-header">` + _players[i].userName + `<span id="score-`+_players[i].playerId+`" class="player-score">Pontos: ` + _players[i].score + `</span></div>
                         <div class="card-body">
                             <div class="text-center" href="#">
-                                <!--<img class="stop-btn-power" src="/public/img/power-stop.png" alt="skill special stop" title="Usar poder stop." />-->
+                                <!--<img class="stop-btn-power" src="/public/img/power-spin.png" alt="skill special stop" title="Usar poder stop." />-->
                             </div>
                         </div>
                     </div>

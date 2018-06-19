@@ -66,23 +66,21 @@ async function prepareMatch(PubSub, dbGameParametersService, room) {
     }
 
     function matchEndedMessageListener({ room: originRoom, match }) {
-        if (room === originRoom) {
-            console.log('# cleaning prepare match events ');
+        console.log('# cleaning prepare match events ');
+        
+        PubSub.unsubscribe(roomPlayerJoinMessageListener);
+        PubSub.unsubscribe(roomPlayerLeftMessageListener);
+        PubSub.unsubscribe(matchEndedMessageListener);
 
-            PubSub.unsubscribe(roomPlayerJoinMessageListener);
-            PubSub.unsubscribe(roomPlayerLeftMessageListener);
-            PubSub.unsubscribe(matchEndedMessageListener);
+        const { dbRoom } = originRoom;
 
-            const { dbRoom } = room;
+        dbRoom.active = false;
+        dbRoom.reason = 'O jogo finalizou.';
 
-            dbRoom.active = false;
-            dbRoom.reason = 'O jogo finalizou.';
-
-            dbRoom
-                .save()
-                .then(console.log)
-                .catch(console.error);
-        }
+        dbRoom
+            .save()
+            .then(console.log)
+            .catch(console.error);
     }
 
     PubSub.subscribe(constants.ROOM_PLAYER_JOIN_MESSAGE, roomPlayerJoinMessageListener);

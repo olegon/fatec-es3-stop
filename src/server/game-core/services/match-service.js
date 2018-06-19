@@ -65,12 +65,12 @@ async function prepareMatch(PubSub, dbGameParametersService, room) {
         }
     }
 
-    function matchEntenderMessageListener ({ room: originRoom, match }) {
+    function matchEndedMessageListener ({ room: originRoom, match }) {
         console.log('# cleaning prepare match events ');
 
         PubSub.unsubscribe(roomPlayerJoinMessageListener);
         PubSub.unsubscribe(roomPlayerLeftMessageListener);
-        PubSub.unsubscribe(matchEntenderMessageListener);
+        PubSub.unsubscribe(matchEndedMessageListener);
 
         PubSub.publish(constants.ROOM_DESTROY_MESSAGE, { room });
     }
@@ -79,7 +79,7 @@ async function prepareMatch(PubSub, dbGameParametersService, room) {
     
     PubSub.subscribe(constants.ROOM_PLAYER_LEFT_MESSAGE, roomPlayerLeftMessageListener);
 
-    PubSub.subscribe(constants.MATCH_ENDED_MESSAGE, matchEntenderMessageListener);
+    PubSub.subscribe(constants.MATCH_ENDED_MESSAGE, matchEndedMessageListener);
 
 }
 

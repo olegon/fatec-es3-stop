@@ -85,6 +85,9 @@
     });
 
     function init(data){
+        $("#div-frozen").show();
+        $("div .footer").hide();
+
         _categories = data.room.categories;
         _player = data.room.players.filter(item => {
             if (item.playerId == data.room.playerId) {return true;}
@@ -126,8 +129,10 @@
 
         if (_player.frozen) {
             $("#div-frozen").show();
+            $("div .footer").hide();
         } else {
             $("#div-frozen").hide();
+            $("div .footer").show();
         }
 
         _players = data.currentPlayers;
@@ -171,7 +176,7 @@
 
     function roomNotActive(data) {
         $("#game-message").html(`
-        <h4 style="padding-top: 20px;">Infelizmente a partida acabou!</h4>
+        <h2 style="padding-top: 20px; color:black;" class="title">Infelizmente a partida acabou!</h2>
         <img src="/public/img/emoji-triste.png" style="width: 30vh; padding-top: 20px;" />`);
         $("#game-message").show();
         $("#match").hide();
@@ -186,7 +191,7 @@
         let resultMatch = `<h4 style="padding-top: 20px;">Partida encerrada!</h4>`;
 
         _players.forEach(item => {
-            resultMatch += `<h3 class="title">` + item.userName + `: ` + item.score + `</h3>`
+            resultMatch += `<h3 class="title">` + item.userName + `: ` + item.score + ` pontos</h3>`
         });
 
         $("#game-message").html(resultMatch);
@@ -196,7 +201,7 @@
 
     function roomNotFound() {
         $("#game-message").html(`
-            <h4 style="padding-top: 20px;">Sala não encontrada</h4>
+            <h2 style="padding-top: 20px;" class="title">Sala não encontrada</h2>
             <img src="/public/img/page_not_found.gif" style="width: 65vh" alt="not found" title="Sala não encontrada." />`);
         $("#game-message").show();
         $("#match").hide();

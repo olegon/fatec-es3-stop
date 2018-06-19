@@ -250,7 +250,7 @@
 
                             <div class="text-center" style="display: ${_player.canCastConfusePlayer ? 'inline' : 'none'};">
                                 <a href="#" data-power="confusion" data-target="` + _players[i].playerId + `">
-                                    <img class="stop-btn-power" src="/public/img/power-stop.png" alt="skill confuse enemy" title="Confundir jogador." />
+                                    <img class="stop-btn-power" src="/public/img/power-spin.png" alt="skill confuse enemy" title="Confundir jogador." />
                                 </a>
                             </div>
                         </div>

@@ -7,7 +7,7 @@ module.exports = service;
 
 const AVAILABLE_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
-function service (PubSub, dbGameParametersService, roundService) {
+function service(PubSub, dbGameParametersService, roundService) {
     PubSub.subscribe(constants.ROOM_CREATE_MESSAGE, (msg, room) => {
         prepareMatch(PubSub, dbGameParametersService, room);
     });
@@ -25,13 +25,13 @@ async function prepareMatch(PubSub, dbGameParametersService, room) {
     const match = {
         availableLetters: [...AVAILABLE_LETTERS],
         currentRound: 0,
-        rounds:  gameParamaters.roundsByMatch,
+        rounds: gameParamaters.roundsByMatch,
         roundDuration: gameParamaters.roundDuration,
         currentPlayers: [],
         waitingPlayers: [...room.players]
     };
 
-    function roomPlayerJoinMessageListener (msg, { player, room: originRoom }) {
+    function roomPlayerJoinMessageListener(msg, { player, room: originRoom }) {
         if (room === originRoom) {
             match.waitingPlayers.push(player);
 
@@ -49,7 +49,7 @@ async function prepareMatch(PubSub, dbGameParametersService, room) {
         }
     }
 
-    function roomPlayerLeftMessageListener (msg, { player, room: originRoom }) {
+    function roomPlayerLeftMessageListener(msg, { player, room: originRoom }) {
         if (room === originRoom) {
             const playerIndex = match.currentPlayers.indexOf(player);
 
@@ -65,18 +65,20 @@ async function prepareMatch(PubSub, dbGameParametersService, room) {
         }
     }
 
-    function matchEndedMessageListener ({ room: originRoom, match }) {
-        console.log('# cleaning prepare match events ');
+    function matchEndedMessageListener({ room: originRoom, match }) {
+        if (room === originRoom) {
+            console.log('# cleaning prepare match events ');
 
-        PubSub.unsubscribe(roomPlayerJoinMessageListener);
-        PubSub.unsubscribe(roomPlayerLeftMessageListener);
-        PubSub.unsubscribe(matchEndedMessageListener);
+            PubSub.unsubscribe(roomPlayerJoinMessageListener);
+            PubSub.unsubscribe(roomPlayerLeftMessageListener);
+            PubSub.unsubscribe(matchEndedMessageListener);
 
-        PubSub.publish(constants.ROOM_DESTROY_MESSAGE, { room });
+            PubSub.publish(constants.ROOM_DESTROY_MESSAGE, { room });
+        }
     }
 
     PubSub.subscribe(constants.ROOM_PLAYER_JOIN_MESSAGE, roomPlayerJoinMessageListener);
-    
+
     PubSub.subscribe(constants.ROOM_PLAYER_LEFT_MESSAGE, roomPlayerLeftMessageListener);
 
     PubSub.subscribe(constants.MATCH_ENDED_MESSAGE, matchEndedMessageListener);
@@ -85,7 +87,7 @@ async function prepareMatch(PubSub, dbGameParametersService, room) {
 
 async function startMatch(PubSub, room, match, roundService) {
     console.log('# start match');
-    
+
     match.currentPlayers.forEach(player => {
         const { socket } = player;
 
@@ -97,7 +99,7 @@ async function startMatch(PubSub, room, match, roundService) {
 
     while (match.currentRound < match.rounds) {
         match.currentRound += 1
-        
+
         console.log(`# starting round ${match.currentRound}`);
 
         await roundService.startRound(room, match);

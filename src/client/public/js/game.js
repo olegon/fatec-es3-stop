@@ -134,10 +134,8 @@
 
         if (_player.frozen) {
             $("#div-frozen").show();
-            $("div .footer").hide();
         } else {
             $("#div-frozen").hide();
-            $("div .footer").show();
         }
 
         if (_player.confused) {

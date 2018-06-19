@@ -91,10 +91,7 @@ async function startRound(PubSub, wordService, playerService, room, match) {
             if (sourcePlayer && targetPlayer) {
                 if (sourcePlayer.mp >= 100) {
                     sourcePlayer.mp -= 100;
-
-                    targetPlayer.socket.emit('confusion_applied', { 
-                        sourceId: sourcePlayer.socket.id
-                    });
+                    targetPlayer.confusionInMs += match.roundDuration * 0.20;
                 }
             }
             else {
@@ -122,6 +119,7 @@ async function startRound(PubSub, wordService, playerService, room, match) {
 
         for (let player of match.currentPlayers) {
             player.frozenInMs = Math.max(0, player.frozenInMs - SERVER_TICK_IN_MS);
+            player.confusionInMs = Math.max(0, player.frozenInMs - SERVER_TICK_IN_MS);
         }
 
         await delay(SERVER_TICK_IN_MS);

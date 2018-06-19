@@ -12,6 +12,7 @@ function service(PubSub) {
                 score: 0,
                 mp: 0,
                 frozenInMs: 0,
+                confusionInMs: 0,
                 userName
             };
 

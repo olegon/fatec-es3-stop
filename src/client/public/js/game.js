@@ -10,9 +10,6 @@
         roomId
     });
 
-    // var body = document.body;
-    // $(body).toggleClass('confusion-applied');
-
     socket.on('room_found', (data) => {
         init(data);
 
@@ -79,7 +76,18 @@
         event.preventDefault();
         
         let target = $(this).data("target");
+
         socket.emit('spell_frost_player', {
+            targetId: target
+        });
+    });
+
+    $("#match").on("click", "a[data-power='confusion']", function(event){
+        event.preventDefault();
+        
+        let target = $(this).data("target");
+        
+        socket.emit('spell_confuse_player', {
             targetId: target
         });
     });
@@ -128,6 +136,13 @@
             setBackgroundFrozen();
         } else {
             if($("#div-frozen")[0]) $("#div-frozen")[0].remove();
+        }
+
+        if (_player.confused) {
+            $('body').addClass('confusion-applied');
+        }
+        else {
+            $('body').removeClass('confusion-applied');
         }
 
         _players = data.currentPlayers;
@@ -228,6 +243,12 @@
                             <div class="text-center" style="display: ${_player.canCastFrostPlayer ? 'inline' : 'none'};">
                                 <a href="#" data-power="frozen" data-target="` + _players[i].playerId + `">
                                     <img class="stop-btn-power" src="/public/img/power-freeze.png" alt="skill freeze enemy" title="Congelar jogador." />
+                                </a>
+                            </div>
+
+                            <div class="text-center" style="display: ${_player.canCastConfusePlayer ? 'inline' : 'none'};">
+                                <a href="#" data-power="confusion" data-target="` + _players[i].playerId + `">
+                                    <img class="stop-btn-power" src="/public/img/power-stop.png" alt="skill confuse enemy" title="Confundir jogador." />
                                 </a>
                             </div>
                         </div>

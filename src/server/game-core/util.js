@@ -30,13 +30,15 @@ function removeElementInPlace(array, predicate) {
     }
 }
 
-function internalPlayerRepresentationToSocketRepresentation({ socket, score, mp, frozenInMs, userName }) {
+function internalPlayerRepresentationToSocketRepresentation({ socket, score, mp, frozenInMs, confusionInMs, userName }) {
     return {
         playerId: socket.id,
         score,
         mp,
         frozen: frozenInMs > 0,
+        confused: confusionInMs > 0,
         canCastFrostPlayer: mp >= 100,
+        canCastConfusePlayer: mp >= 100,
         userName
     };
 }

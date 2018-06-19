@@ -56,7 +56,7 @@ h3.styled {
 
 .confusion-applied {
     animation-name: confusion-frames;
-    animation-duration: 5s;
+    animation-duration: 3s;
     animation-iteration-count: infinite;
     animation-timing-function:  linear;
     animation-fill-mode: backwards;

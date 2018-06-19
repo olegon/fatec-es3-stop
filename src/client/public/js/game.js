@@ -10,9 +10,6 @@
         roomId
     });
 
-    // var body = document.body;
-    // $(body).toggleClass('confusion-applied');
-
     socket.on('room_found', (data) => {
         init(data);
 
@@ -79,7 +76,18 @@
         event.preventDefault();
         
         let target = $(this).data("target");
+
         socket.emit('spell_frost_player', {
+            targetId: target
+        });
+    });
+
+    $("#match").on("click", "a[data-power='confusion']", function(event){
+        event.preventDefault();
+        
+        let target = $(this).data("target");
+        
+        socket.emit('spell_confuse_player', {
             targetId: target
         });
     });
@@ -133,6 +141,13 @@
         } else {
             $("#div-frozen").hide();
             $("div .footer").show();
+        }
+
+        if (_player.confused) {
+            $('body').addClass('confusion-applied');
+        }
+        else {
+            $('body').removeClass('confusion-applied');
         }
 
         _players = data.currentPlayers;
@@ -227,12 +242,18 @@
             } else {
                 boxPlayers += `
                 <div class="col-md-` + boxSize + `" style="padding: 0;">
-                    <div class="card stop-player-card">
+                    <div class="card stop-player-card ${_players[i].frozen ? 'player-is-frozen' : ''} ">
                         <div class="card-header">` + _players[i].userName + `<span id="score-` + _players[i].playerId + `" class="player-score">Pontos: ` + _players[i].score + `&nbsp;&nbsp;<img class="stop-btn-ban-user" src="/public/img/ban-user.png" alt="ban user button" title="Banir usuário." /></span></div>
                         <div class="card-body">
                             <div class="text-center" style="display: ${_player.canCastFrostPlayer ? 'inline' : 'none'};">
                                 <a href="#" data-power="frozen" data-target="` + _players[i].playerId + `">
                                     <img class="stop-btn-power" src="/public/img/power-freeze.png" alt="skill freeze enemy" title="Congelar jogador." />
+                                </a>
+                            </div>
+
+                            <div class="text-center" style="display: ${_player.canCastConfusePlayer ? 'inline' : 'none'};">
+                                <a href="#" data-power="confusion" data-target="` + _players[i].playerId + `">
+                                    <img class="stop-btn-power" src="/public/img/power-stop.png" alt="skill confuse enemy" title="Confundir jogador." />
                                 </a>
                             </div>
                         </div>

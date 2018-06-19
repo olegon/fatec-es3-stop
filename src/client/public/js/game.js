@@ -93,9 +93,6 @@
     });
 
     function init(data){
-        $("#div-frozen").show();
-        $("div .footer").hide();
-
         _categories = data.room.categories;
         _player = data.room.players.filter(item => {
             if (item.playerId == data.room.playerId) {return true;}

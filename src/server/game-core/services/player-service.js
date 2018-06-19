@@ -6,12 +6,13 @@ function service(PubSub) {
     const players = [];
     
     return {
-        connect (socket) {
+        connect (socket, userName) {
             const newPlayer = {
                 socket,
                 score: 0,
                 mp: 0,
-                frozenInMs: 0
+                frozenInMs: 0,
+                userName
             };
 
             players.push(newPlayer);

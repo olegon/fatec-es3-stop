@@ -1,6 +1,8 @@
 const path = require('path');
 const express = require('express');
 const socketIO = require('socket.io');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 
 module.exports = function (app, server, PubSub) {
     const {
@@ -24,6 +26,26 @@ module.exports = function (app, server, PubSub) {
     const io = socketIO(server);
 
     app.use('/public', express.static(path.join(__dirname, '../../client/public')));
+    app.use(cookieParser('#shdadh$xxs'))
+    app.use(bodyParser.urlencoded({ extended: true }));
+
+    app.get('/login', (req, res) => {
+        res.sendFile(path.join(__dirname, '../../client/login.html'));
+    });
+
+    app.post('/login', (req, res) => {
+        res.cookie('userName', req.body.name);
+        res.redirect('/');
+    });
+
+    app.use((req, res, next) => {
+        if (req.cookies.userName == null || req.cookies.userName === '') {
+            res.redirect('/login');
+        }
+        else {
+            next();
+        }
+    });
 
     app.get('/logic', (req, res) => {
         res.sendFile(path.join(__dirname, '../../client/logic/index.html'));
@@ -46,9 +68,13 @@ module.exports = function (app, server, PubSub) {
     });
 
     io.on('connection', (socket) => {
+        cookieParser()(socket.request, socket.response, () => {});
+
+        const { userName } = socket.request.cookies;
+        
         const { id } = socket;
 
-        playerService.connect(socket);
+        playerService.connect(socket, userName);
 
         socket.on('join_room', (data) => {
             roomService.join(socket, data);
@@ -57,9 +83,11 @@ module.exports = function (app, server, PubSub) {
         socket.on('disconnect', function () {
             playerService.disconnect(socket);
         });
+
+
     });
 
     server.on('listening', () => {
-        
+
     });
 }

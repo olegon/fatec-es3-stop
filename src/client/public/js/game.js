@@ -127,7 +127,7 @@
         $("#current-letter").html(data.letter);
         $("#current-round").html(data.currentRound + " / " + data.rounds);
 
-        _player = data.currentPlayers.filter(item => {
+        _player = [...data.currentPlayers, ...data.waitingPlayers].filter(item => {
             if (item.playerId == _player.playerId) {return true;}
             return false;
         })[0];

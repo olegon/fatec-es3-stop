@@ -72,11 +72,10 @@
     $("#match #table-game").on("click", "#request-stop", function(event){
         event.preventDefault();
         
-        Wsocket.emit('stop_request');
+        socket.emit('stop_request');
     });
 
     $("#match").on("click", "a[data-power='frozen']", function(event){
-        debugger;
         event.preventDefault();
         
         let target = $(this).data("target");
@@ -86,11 +85,14 @@
     });
 
     function init(data){
-        _player = { playerId: data.room.playerId };
         _categories = data.room.categories;
+        _player = data.room.players.filter(item => {
+            if (item.playerId == data.room.playerId) {return true;}
+            return false;
+        })[0];
         
         $("#room-name").html(data.room.name);
-        $("#player-id").html(_player.username);
+        $("#player-id").html(_player.userName);
 
         if (data.room.status != "WAITING_FOR_PLAYERS") {
             $("#match").show();
@@ -121,6 +123,13 @@
             if (item.playerId == _player.playerId) {return true;}
             return false;
         })[0];
+
+        if (_player.frozen) {
+            setBackgroundFrozen();
+        } else {
+            if($("#div-frozen")[0]) $("#div-frozen")[0].remove();
+        }
+
         _players = data.currentPlayers;
         updatePlayers();
     }
@@ -177,7 +186,7 @@
         let resultMatch = `<h4 style="padding-top: 20px;">Partida encerrada!</h4>`;
 
         _players.forEach(item => {
-            resultMatch += `<h3 class="title">` + item.username + `: ` + item.score + `</h3>`
+            resultMatch += `<h3 class="title">` + item.userName + `: ` + item.score + `</h3>`
         });
 
         $("#game-message").html(resultMatch);
@@ -202,11 +211,11 @@
                 boxPlayers += `
                 <div class="col-md-` + boxSize + `" style="padding: 0;">
                     <div class="card text-white bg-info stop-player-card">
-                        <div class="card-header">` + _players[i].username + `<span id="score-`+_players[i].playerId+`" class="player-score">Pontos: ` + _players[i].score + `</span></div>
+                        <div class="card-header">` + _players[i].userName + `<span id="score-`+_players[i].playerId+`" class="player-score">Pontos: ` + _players[i].score + `</span></div>
                         <div class="card-body">
-                            <a class="text-center" href="#">
-                                <img class="stop-btn-power" src="/public/img/power-stop.png" alt="skill special stop" title="Usar poder stop." />
-                            </a>
+                            <div class="text-center" href="#">
+                                <!--<img class="stop-btn-power" src="/public/img/power-stop.png" alt="skill special stop" title="Usar poder stop." />-->
+                            </div>
                         </div>
                     </div>
                 </div>`;
@@ -214,11 +223,13 @@
                 boxPlayers += `
                 <div class="col-md-` + boxSize + `" style="padding: 0;">
                     <div class="card stop-player-card">
-                        <div class="card-header">` + _players[i].username + `<span id="score-` + _players[i].playerId + `" class="player-score">Pontos: ` + _players[i].score + `&nbsp;&nbsp;<img class="stop-btn-ban-user" src="/public/img/ban-user.png" alt="ban user button" title="Banir usuário." /></span></div>
+                        <div class="card-header">` + _players[i].userName + `<span id="score-` + _players[i].playerId + `" class="player-score">Pontos: ` + _players[i].score + `&nbsp;&nbsp;<img class="stop-btn-ban-user" src="/public/img/ban-user.png" alt="ban user button" title="Banir usuário." /></span></div>
                         <div class="card-body">
-                            <a class="text-center" href="#" data-power="frozen" data-target="` + _players[i].playerId + `" style="display: ${_player.canCastFrostPlayer ? 'inline' : 'none'};">
-                                <img class="stop-btn-power" src="/public/img/power-freeze.png" alt="skill freeze enemy" title="Congelar jogador." />
-                            </a>
+                            <div class="text-center" style="display: ${_player.canCastFrostPlayer ? 'inline' : 'none'};">
+                                <a href="#" data-power="frozen" data-target="` + _players[i].playerId + `">
+                                    <img class="stop-btn-power" src="/public/img/power-freeze.png" alt="skill freeze enemy" title="Congelar jogador." />
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>`;
@@ -226,5 +237,16 @@
         }
 
         $("#current-players").html(boxPlayers);
+    }
+
+    function setBackgroundFrozen(){
+        let frozenDiv = `
+        <div id="div-frozen" style="
+        width: 100%;
+        height: 100%;
+        background: url(../img/main-footer.png) !important;
+        position: absolute;"></div>`; 
+        
+        $("body")
     }
 })();   

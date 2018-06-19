@@ -40,8 +40,9 @@ h3.styled {
 }
 
 .stop-btn-power {
-    width: 160px;
+    width: 50px;
     cursor: pointer;
+    margin-left: 25%;
 }
 
 .stop-player-card {

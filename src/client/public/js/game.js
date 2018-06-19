@@ -122,9 +122,9 @@
         })[0];
 
         if (_player.frozen) {
-            setBackgroundFrozen();
+            $("#div-frozen").show();
         } else {
-            if($("#div-frozen")[0]) $("#div-frozen")[0].remove();
+            $("#div-frozen").hide();
         }
 
         _players = data.currentPlayers;
@@ -234,16 +234,5 @@
         }
 
         $("#current-players").html(boxPlayers);
-    }
-
-    function setBackgroundFrozen(){
-        let frozenDiv = `
-        <div id="div-frozen" style="
-        width: 100%;
-        height: 100%;
-        background: url(../img/main-footer.png) !important;
-        position: absolute;"></div>`; 
-        
-        $("body")
     }
 })();   

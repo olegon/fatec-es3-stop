@@ -10,6 +10,9 @@
         roomId
     });
 
+    // var body = document.body;
+    // $(body).toggleClass('confusion-applied');
+
     socket.on('room_found', (data) => {
         init(data);
 

@@ -69,16 +69,36 @@ async function startRound(PubSub, wordService, playerService, room, match) {
             const { targetId } = frostPlayerEvent;
 
             const sourcePlayer = playerService.getPlayerBySocket(socket);
-            const targetPlayer = match.currentPlayer.find(player => player.socket.id === targetId);
+            const targetPlayer = match.currentPlayers.find(player => player.socket.id === targetId);
             
             if (sourcePlayer && targetPlayer) {
                 if (sourcePlayer.mp >= 100) {
                     sourcePlayer.mp -= 100;
-                    targetPlayer.frozenInMs += 5000;
+                    targetPlayer.frozenInMs += match.roundDuration * 0.20;
                 }
             }
             else {
                 console.error('# spell_frost_player: target or source player not found.');
+            }
+        });
+
+        socket.on('spell_confuse_player', (confusePlayerEvent) => {
+            const { targetId } = confusePlayerEvent;
+
+            const sourcePlayer = playerService.getPlayerBySocket(socket);
+            const targetPlayer = match.currentPlayers.find(player => player.socket.id === targetId);
+            
+            if (sourcePlayer && targetPlayer) {
+                if (sourcePlayer.mp >= 100) {
+                    sourcePlayer.mp -= 100;
+
+                    targetPlayer.socket.emit('confusion_applied', { 
+                        sourceId: sourcePlayer.socket.id
+                    });
+                }
+            }
+            else {
+                console.error('# spell_confuse_player: target or source player not found.');
             }
         });
     }
@@ -101,7 +121,7 @@ async function startRound(PubSub, wordService, playerService, room, match) {
         timeLeft -= SERVER_TICK_IN_MS;
 
         for (let player of match.currentPlayers) {
-            player.frozenInMs -= SERVER_TICK_IN_MS;
+            player.frozenInMs = Math.max(0, player.frozenInMs - SERVER_TICK_IN_MS);
         }
 
         await delay(SERVER_TICK_IN_MS);

@@ -57,17 +57,17 @@ function registerToPlayerDisconnetedEvent(PubSub, runningRooms) {
 }
 
 function registerToGameDetroyEvent (PubSub, runningRooms) {
-    // PubSub.subscribe(constants.ROOM_DESTROY_MESSAGE, function (msg, { room }) {
-    //     const { dbRoom } = room;
+    PubSub.subscribe(constants.ROOM_DESTROY_MESSAGE, function (msg, { room }) {
+        const { dbRoom } = room;
         
-    //     dbRoom.active = false;
-    //     dbRoom.reason = 'O jogo finalizou.';
+        dbRoom.active = false;
+        dbRoom.reason = 'O jogo finalizou.';
 
-    //     dbRoom
-    //     .save()
-    //     .then(console.log)
-    //     .catch(console.error);
-    // });
+        dbRoom
+        .save()
+        .then(console.log)
+        .catch(console.error);
+    });
 }
 
 function handleRoomNotFound(socket) {

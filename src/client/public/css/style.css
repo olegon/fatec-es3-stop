@@ -52,3 +52,22 @@ h3.styled {
     float: right;
     font-weight: 500;
 }
+
+
+.confusion-applied {
+    animation-name: confusion-frames;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    animation-timing-function:  linear;
+    animation-fill-mode: backwards;
+}
+
+@keyframes confusion-frames {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

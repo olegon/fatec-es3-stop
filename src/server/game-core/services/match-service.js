@@ -73,7 +73,15 @@ async function prepareMatch(PubSub, dbGameParametersService, room) {
             PubSub.unsubscribe(roomPlayerLeftMessageListener);
             PubSub.unsubscribe(matchEndedMessageListener);
 
-            PubSub.publish(constants.ROOM_DESTROY_MESSAGE, { room });
+            const { dbRoom } = room;
+
+            dbRoom.active = false;
+            dbRoom.reason = 'O jogo finalizou.';
+
+            dbRoom
+                .save()
+                .then(console.log)
+                .catch(console.error);
         }
     }
 

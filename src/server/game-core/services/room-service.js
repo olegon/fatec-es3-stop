@@ -10,7 +10,6 @@ function service(PubSub, dbRoomService, playerService) {
     const runningRooms = {};
 
     registerToPlayerDisconnetedEvent(PubSub, runningRooms);
-    registerToGameDetroyEvent(PubSub, runningRooms);
 
     return {
         async join(socket, parameters) {
@@ -53,20 +52,6 @@ function registerToPlayerDisconnetedEvent(PubSub, runningRooms) {
                     });
                 }
             });
-    });
-}
-
-function registerToGameDetroyEvent (PubSub, runningRooms) {
-    PubSub.subscribe(constants.ROOM_DESTROY_MESSAGE, function (msg, { room }) {
-        const { dbRoom } = room;
-        
-        dbRoom.active = false;
-        dbRoom.reason = 'O jogo finalizou.';
-
-        dbRoom
-        .save()
-        .then(console.log)
-        .catch(console.error);
     });
 }
 

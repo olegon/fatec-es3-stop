@@ -1,0 +1,506 @@
+1,abastecedor
+2,acabador de embalagens
+3,acougueiro
+4,acupunturista
+5,aderecista
+6,adesivador
+7,adestrador
+8,administrador
+9,advogado
+10,afiador de ferramentas
+11,agente
+12,agente de aeroporto
+13,agente de seguranca
+14,agente de servicos
+15,agente de viagens
+16,agente funerario
+17,agricultor
+18,alfaiate
+19,alinhador
+20,almirante
+21,almoxarife
+22,alpinista industrial
+23,amarrador
+24,analista
+25,analista administrativo
+26,analista de risco
+27,analista de seguros
+28,analista de sistemas
+29,analista de tecnologia da informacao
+30,animador de festas
+31,animador digital
+32,antropologo
+33,apontador de obras
+34,apontador de producao
+35,aprendiz
+36,apresentador
+37,aquarista
+38,armador
+39,armazenista
+40,arqueologo
+41,arquiteto
+42,arquivista
+43,arrematador
+44,arte finalista
+45,artesao
+46,articulador social
+47,ascensorista
+48,assessor
+49,assistente
+50,atendente
+51,ator
+52,atuario
+53,auditor
+54,auxiliar
+55,avaliador de imoveis
+56,avaliador de veiculos
+57,avaliador fisico
+58,azulejista
+59,baba
+60,back office
+61,back office de vendas
+62,balanceiro
+63,balconista
+64,bamburista
+65,barista
+66,barman
+67,bercarista
+68,bibliotecario
+69,bilheteiro
+70,biologista
+71,biologo
+72,biomedico
+73,bioquimico
+74,biotecnologo
+75,blaster
+76,blogueiro
+77,bloquista
+78,bombeiro
+79,bombeiro civil
+80,bombeiro industrial
+81,boiadeiro
+82,booker
+83,bordador
+84,borracheiro
+85,brigadeiro
+86,business partner
+87,cabeleireiro
+88,cabista
+89,caixa
+90,calceteiro
+91,calculista
+92,caldeireiro
+93,camareiro
+94,caminhoneiro
+95,capitao
+96,captador de imoveis
+97,caracterizador
+98,carpinteiro
+99,cartazista
+100,carteiro
+101,caseiro
+102,cenografo
+103,cenotecnico
+104,ceo
+105,cfo
+106,cpo
+107,coo
+108,chapeiro
+109,chaveiro
+110,churrasqueiro
+111,cilindrista
+112,cinegrafista
+113,classificador de graos
+114,cliente oculto
+115,coach
+116,cobrador
+117,cobrador de onibus
+118,codificador de dados
+119,colchoeiro
+120,coletor de amostras
+121,coletor de lixo
+122,colorista
+123,colorista de papel
+124,colorista textil
+125,comentarista
+126,comissario de avarias
+127,comissario de bordo
+128,concierge
+129,confeiteiro
+130,conferente
+131,conselheiro tutelar
+132,consultor
+133,contabilista
+134,contador
+135,contador gerencial
+136,contato publicitario
+137,conteudista
+138,contra regra
+139,controller
+140,coordenador
+141,copeiro
+142,copiador de chapa
+143,coreografo
+144,coronel
+145,corretor
+146,corretor de imoveis
+147,corretor de seguros
+148,cortador
+149,cortador de tecidos
+150,cortador de vidro
+151,costureiro
+152,cozinheiro
+153,crepeiro
+154,cronoanalista
+155,cuidador
+156,cuidador de criancas
+157,cuidador de idosos
+158,cumim
+159,curador de arte
+160,dancarino
+161,dba
+162,dba oracle
+163,dba sql
+164,decorador
+165,dedetizador
+166,degustador
+167,dentista
+168,depiladora
+169,deputado
+170,dermoconsultor
+171,desembargador
+172,desenhista
+173,desentupidor
+174,designer
+175,despachante
+176,detetive
+177,diagramador
+178,digitador
+179,digitador de laudos
+180,digitalizador
+181,diligenciador
+182,diretor
+183,divulgador
+184,dj
+185,documentador
+186,ecologo
+187,economista
+188,editor
+189,educador
+190,eletricista
+191,eletromecanico
+192,eletrotecnico
+193,embalador
+194,embriologista
+195,emissor de ctrc
+196,emissor de passagens
+197,empacotador
+198,empresario
+199,encadernador
+200,encanador
+201,encapsulador
+202,encarregado administrativo
+203,enfermeiro
+204,enfestador
+205,engenheiro
+206,entregador
+207,ergonomista
+208,escrevente
+209,escriturario
+210,especialista
+211,esportista
+212,estagiario
+213,estampador
+214,estatistico
+215,esteticista
+216,estilista
+217,estivador
+218,estofador
+219,estoquista
+220,etiquetador
+221,executivo
+222,executivo de contas
+223,executivo de vendas
+224,extrusor
+225,farmaceutico
+226,faturista
+227,fazendeiro
+228,ferramenteiro
+229,ferreiro
+230,figurinista
+231,fiscal
+232,fisico
+233,fisioterapeuta
+234,florista
+235,fonoaudiologo
+236,forneiro
+237,fotografo
+238,fotogravador
+239,fracionador
+240,frentista
+241,fresador
+242,fundidor de metais
+243,funileiro
+244,galvanizador
+245,garantista
+246,garcom
+247,garde manger
+248,gastronomo
+249,gemologo
+250,general
+251,geofisico
+252,geografo
+253,geologo
+254,gerente
+255,gerontologo
+256,gesseiro
+257,gestor ambiental
+258,gestor portuario
+259,governador
+260,governanta
+261,greidista
+262,guia de turismo
+263,historiador
+264,hostess
+265,ilustrador
+266,impermeabilizador
+267,implantador de sistemas
+268,impressor
+269,inspetor
+270,instalador
+271,instrumentador cirurgico
+272,instrumentista
+273,instrutor
+274,interprete
+275,jardineiro
+276,jatista
+277,jornaleiro
+278,jornalista
+279,jogador de futebol
+280,juiz
+281,laboratorista
+282,lactarista
+283,laminador
+284,lancheiro
+285,lapidador de gemas
+286,lapidador de vidros
+287,laqueador
+288,lavadeiro
+289,lavador
+290,lavrador
+291,layoutista
+292,leiturista
+293,letrista
+294,lider comercial
+295,limpador
+296,limpador de vidros
+297,lingotador
+298,lixador
+299,locutor
+300,lubrificador
+301,lustrador de moveis
+302,macariqueiro
+303,mae social
+304,magarefe
+305,maître
+306,mandrilhador
+307,manicure e pedicure
+308,manipulador de cosmeticos
+309,manipulador de farmacia
+310,manobrista
+311,maqueiro
+312,maquetista
+313,maquiador
+314,maquinista de trem
+315,major
+316,marceneiro
+317,marechal
+318,marinheiro
+319,marmorista
+320,marteleteiro
+321,massagista
+322,masseiro
+323,massoterapeuta
+324,matematico
+325,mecanico
+326,medico 
+327,medidor de obras
+328,mensageiro
+329,merendeira
+330,mestre cervejeiro
+331,mestre de cabotagem
+332,mestre de obras
+333,metalurgico
+334,meteorologista
+335,metrologista
+336,microbiologista
+337,ministro
+338,modelista
+339,modelo
+340,modelo de prova
+341,moldador
+342,moldureiro
+343,moleiro
+344,monitor
+345,montador
+346,mordomo
+347,motoboy
+348,motorista
+349,museologo
+350,musicoterapeuta
+351,musico
+352,naturologo
+353,neuropsicologo
+354,nivelador
+355,nutricionista
+356,oceanografo
+357,office boy
+358,oficial 
+359,operador
+360,orcamentista
+361,orcamentista civil
+362,organizador de eventos
+363,orientador educacional
+364,orientador socio educativo
+365,ourives
+366,padeiro
+367,paisagista
+368,palestrante
+369,panfleteiro
+370,passador
+371,pedagogo
+372,pedagogo empresarial
+373,pedreiro
+374,peixeiro
+375,perfumista
+376,perito
+377,perito judicial
+378,personal stylist
+379,personal trainer
+380,pesador
+381,pesquisador
+382,pesquisador de mercado
+383,piloteiro
+384,piloto
+385,pintor
+386,pizzaiolo
+387,planejador de producao
+388,planejador de projetos
+389,podologo
+390,polidor
+391,politico
+392,policial
+393,porteiro
+394,prefeito
+395,prensista
+396,presidente
+397,processista
+398,produtor
+399,produtor artistico
+400,produtor cultural
+401,produtor de casting
+402,professor
+403,programador
+404,projetista
+405,promoter
+406,promotor 
+407,propagandista
+408,prostituta
+409,protetico
+410,psicologo
+411,psicomotricista
+412,psicopedagogo
+413,publicitario
+414,quimico
+415,radialista
+416,rebarbador de metais
+417,rebobinador
+418,recebedor
+419,recepcionista
+420,recreador
+421,recuperador de credito
+422,redator
+423,regulador de sinistros
+424,relacoes publicas
+425,relojoeiro
+426,reporter
+427,repositor
+428,repositor de pereciveis
+429,representante comercial
+430,retificador
+431,revisor de tecidos
+432,revisor de texto
+433,rigger
+434,robotista
+435,roteirista
+436,roteirizador
+437,saladeiro
+438,salgadeiro
+439,salva vidas
+440,sapateiro
+441,scouter
+442,scrum master
+443,secretaria
+444,secretario
+445,seguranca
+446,senador
+447,serralheiro
+448,servente de obras
+449,sinaleiro
+450,sindico
+451,sociologo
+452,socorrista
+453,soldado
+454,soldador
+455,soldador montador
+456,sommelier
+457,sondador
+458,sonoplasta
+459,sorveteiro
+460,steward
+461,superintendente
+462,superintendente comercial
+463,superintendente de operacoes
+464,supervisor
+465,suporte tecnico
+466,sushiman
+467,tapeceiro
+468,tecelao
+469,tecnico
+470,tecnologo
+471,telefonista
+472,telhadista
+473,tenente
+474,terapeuta
+475,terapeuta ocupacional
+476,tesoureiro
+477,tester
+478,tintureiro
+479,topografo
+480,torneiro ferramenteiro
+481,torneiro mecanico
+482,tosador
+483,tracador de caldeiraria
+484,trader
+485,tradutor
+486,trainee
+487,tratorista
+488,trefilador
+489,trocador de moldes
+490,turismologo
+491,vendedor
+492,vereador
+493,veterinario
+494,videografista
+495,vidraceiro
+496,vigia
+497,vigilante
+498,vistoriador
+499,visual merchandiser
+500,vitrinista
+501,web designer
+502,web developer
+503,webmaster
+504,youtuber
+505,zelador
+506,zootecnista

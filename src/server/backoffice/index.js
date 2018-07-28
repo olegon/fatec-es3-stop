@@ -3,11 +3,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const flash = require('express-flash');
 const morgan = require('morgan');
 
 
-module.exports = function (app, server) {
+module.exports = function (app, server, PubSub, mongoose) {
     const backofficeRouter = express.Router();
 
     backofficeRouter.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length]'));
@@ -17,10 +18,14 @@ module.exports = function (app, server) {
     backofficeRouter.use(flash());
     backofficeRouter.use(bodyParser.json());
     backofficeRouter.use(bodyParser.urlencoded({ extended: false }));
+
     backofficeRouter.use(session({
         secret: 'SESSION-SECRET',
+        store: new MongoStore({
+            mongooseConnection: mongoose.connection
+        }),
         resave: false,
-        saveUninitialized: false
+        saveUninitialized: true
     }));
 
     backofficeRouter.get('/', (req, res) => {

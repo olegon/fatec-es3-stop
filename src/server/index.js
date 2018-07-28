@@ -8,20 +8,19 @@ const PubSub = require('pubsub-js');
 const apiSetup = require('./api');
 const gameCoreSetup = require('./game-core');
 const backofficeSetup = require('./backoffice');
-const port = process.env.PORT || 8080;
+const port = process.env.PORT
 
 const app = express();
 const server = http.createServer(app);
 
-// mongoose.connect('mongodb://nodestop:nodestop@ds153869.mlab.com:53869/nodestop');
-mongoose.connect('mongodb://localhost:27017/nodestop');
+mongoose.connect(process.env.MONGO_CONNECTIONSTRING);
 
 app.engine('hbs', hbs({ defaultLayout: 'main', extname: 'hbs' }));
 app.set('view engine', 'hbs');
 
-gameCoreSetup(app, server, PubSub);
-apiSetup(app, server, PubSub);
-backofficeSetup(app, server, PubSub);
+gameCoreSetup(app, server, PubSub, mongoose);
+apiSetup(app, server, PubSub, mongoose);
+backofficeSetup(app, server, PubSub, mongoose);
 
 server.listen(port);
 server.on('error', onError);

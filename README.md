@@ -10,9 +10,20 @@ Esse repositório destina-se aos arquivos do jogo _Stop_ a ser desenvolvido para
 
 ## Tecnologias
 
+### Back-end
+
 - node.js 8.x (Carbon LTS)
 - npm 5.x
 - mongo 3.6.x
+- docker 18.x
+- docker-compose 1.21.x
+
+
+### Front-end
+
+- jQuery
+- Bootstrap
+- handlebars
 
 ## Integrantes
 

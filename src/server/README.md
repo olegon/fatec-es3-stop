@@ -7,7 +7,7 @@
 ```sh
 npm install
 
-PORT=8080 npm start
+MONGO_CONNECTIONSTRING=mongodb://localhost:27017/nodestop PORT=3000 npm start
 ```
 
-2. Abra uma aba no seu navegador e acesse o endereço http://localhost:8080
+2. Abra uma aba no seu navegador e acesse o endereço http://localhost:3000

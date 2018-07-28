@@ -1,0 +1,14 @@
+version: '2.1'
+
+services:
+  stop:
+    image: fatec-node-es3
+    build: .
+    environment:
+      MONGO_CONNECTIONSTRING: mongodb://mongo-instance:27017/nodestop
+    ports:
+      - 3000:3000
+    depends_on: 
+      - mongo-instance
+  mongo-instance:
+    image: mongo

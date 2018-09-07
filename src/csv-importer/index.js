@@ -3,6 +3,7 @@ const fetch = require('node-fetch');
 const { promisify } = require('util');
 
 const readFileAsync = promisify(fs.readFile);
+const baseUrl = 'http://localhost:3000';
 
 processFiles([
     'Animal.csv',
@@ -10,12 +11,12 @@ processFiles([
     'Fruta.csv',
     'Instrumento.csv',
     'País.csv',
-    'Profissão.csv',
-    'Pokémon.csv'
+    'Pokémon.csv',
+    'Profissão.csv'
 ]);
 
 async function processFiles(files) {
-    const categoryResponse = await fetch('http://stop.olegon.com.br/api/category', {
+    const categoryResponse = await fetch(`${baseUrl}/api/category`, {
         headers: {
             'Content-Type': 'application/json',
             'Cookie': 'userName=Leandico'
@@ -38,7 +39,7 @@ async function processFiles(files) {
                 await processCategory(category._id, filename);
             }
             else {
-                const categoryResponse = await fetch('http://stop.olegon.com.br/api/category', {
+                const categoryResponse = await fetch(`${baseUrl}/api/category`, {
                     method: 'POST',
                     body: JSON.stringify({
                         name: categoryName
@@ -67,7 +68,7 @@ async function processCategory(categoryId, filename) {
         const [ , word ] = line.split(',');
         
         try {
-            const wordResponse = await fetch('http://stop.olegon.com.br/api/words', {
+            const wordResponse = await fetch(`${baseUrl}/api/words`, {
                 method: 'POST',
                 body: JSON.stringify({
                     name: word,

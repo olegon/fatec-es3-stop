@@ -1,14 +1,17 @@
-version: '2.1'
+version: '3'
 
 services:
+  mongo-instance:
+    image: mongo
+    volumes:
+      - "/opt/docker-volumes/stop-online/mongo/data/db:/data/db"
   stop:
     image: fatec-node-es3
     build: .
     environment:
       MONGO_CONNECTIONSTRING: mongodb://mongo-instance:27017/nodestop
+      PORT: 3000
     ports:
       - 3000:3000
     depends_on: 
       - mongo-instance
-  mongo-instance:
-    image: mongo

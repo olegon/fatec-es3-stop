@@ -28,7 +28,7 @@ if (app.Environment.IsDevelopment())
 
 // app.UseHttpsRedirection();
 
-app.MapHub<NotificationHub>("/notification");
+app.MapHub<GameHub>("/game-hub");
 
 app.MapGet("/rooms", () =>
 {

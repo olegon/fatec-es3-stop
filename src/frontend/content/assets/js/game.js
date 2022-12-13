@@ -1,104 +1,120 @@
-(function () {
+(async function () {
+
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("http://localhost:5240/game-hub")
+        .build();
+
+    await connection.start();
+
+    $(() => {
+        // testing signalR
+        connection.on("broadcast", data => {
+            console.log(data);
+        });
+    });
+
+
     const [, roomId] = /^\/game\/(.*?)$/.exec(location.pathname);
-    
-    const socket = io();
+
     let _player;
     let _categories = 0;
     let _players = 0;
 
-    socket.emit('join_room', {
+    connection.invoke('join_room', {
         roomId
     });
 
-    socket.on('room_found', (data) => {
+    connection.on('room_found', (data) => {
         init(data);
 
         console.log('room_found', data);
     });
 
-    socket.on('new_round', (data) => {
-        newRound(data);
-        
-        console.log('new_round', data);
-    });
-
-    socket.on('room_not_found', (data) => {
+    connection.on('room_not_found', (data) => {
         roomNotFound();
 
         console.log('room_not_found', data);
     });
 
-    socket.on('room_not_active', (data) => {
+    connection.on('room_not_active', (data) => {
         roomNotActive(data);
-        
+
         console.log('room_not_active', data);
     });
 
-    socket.on('round_ended', (data) => {
+    connection.on('round_ended', (data) => {
         roundEnded(data);
-        
+
         console.log('round_ended', data);
     });
 
-    socket.on('match_ended', (data) => {
+    connection.on('match_ended', (data) => {
         matchEnded(data);
-        
+
         console.log('match_ended', data);
     });
 
-    socket.on('server_timer', (data) => {
+    connection.on('server_timer', (data) => {
         update(data);
-        
+
         console.log('server_timer', data);
     });
 
-    socket.on('new_match', (data) => {
+    connection.on('new_match', (data) => {
         console.log('new_match', data);
     });
 
-    $("#match").on("change", "input", function(event){
+    connection.on('new_round', (data) => {
+        newRound(data);
+
+        console.log('new_round', data);
+    });
+
+
+
+
+
+
+    $("#match").on("change", "input", function (event) {
         let categoryId = $(this).data("category");
         let word = $(this).val();
-        
-        socket.emit('typed_word', {
+
+        connection.invoke('typed_word', {
             category_id: categoryId,
             word: word
         });
     });
 
-    $("#match #table-game").on("click", "#request-stop", function(event){
+    $("#match #table-game").on("click", "#request-stop", function (event) {
         event.preventDefault();
-        
-        socket.emit('stop_request');
+
+        connection.invoke('stop_request');
     });
 
-    $("#match").on("click", "a[data-power='frozen']", function(event){
+    $("#match").on("click", "a[data-power='frozen']", function (event) {
         event.preventDefault();
-        
+
         let target = $(this).data("target");
 
-        socket.emit('spell_frost_player', {
+        connection.invoke('spell_frost_player', {
             targetId: target
         });
     });
 
-    $("#match").on("click", "a[data-power='confusion']", function(event){
+    $("#match").on("click", "a[data-power='confusion']", function (event) {
         event.preventDefault();
-        
+
         let target = $(this).data("target");
-        
-        socket.emit('spell_confuse_player', {
+
+        connection.invoke('spell_confuse_player', {
             targetId: target
         });
     });
 
-    function init(data){
+    function init(data) {
+        _player = data.player;
         _categories = data.room.categories;
-        _player = data.room.players.filter(item => {
-            if (item.playerId == data.room.playerId) {return true;}
-            return false;
-        })[0];
-        
+
         $("#room-name").html(data.room.name);
         $("#player-id").html(_player.userName);
 
@@ -128,7 +144,7 @@
         $("#current-round").html(data.currentRound + " / " + data.rounds);
 
         _player = [...data.currentPlayers, ...data.waitingPlayers].filter(item => {
-            if (item.playerId == _player.playerId) {return true;}
+            if (item.playerId == _player.playerId) { return true; }
             return false;
         })[0];
 
@@ -151,7 +167,7 @@
         updatePlayers();
     }
 
-    function newRound(data){
+    function newRound(data) {
         $("#game-message").hide();
         $("#match").show();
 
@@ -163,21 +179,21 @@
 
         lineCategory += "<tr>";
         lineCategory += "<td><input type='text' class='form-control' value='" + data.letter + "' disabled='disabled'></td>";
-        
+
         for (var i = 0; i < _categories.length; i++) {
             lineCategory += "<td><input type='text' class='form-control' data-category='" + _categories[i]._id + "'data-letter='" + data.letter + "' placeholder='" + data.letter + "...'></td>";
         }
 
         lineCategory += "<td><a id='request-stop' type='button' class='btn btn-primary btn-xs' href='#'>STOP!</a></td>";
         lineCategory += "</tr>";
-        
+
         $("#table-game tbody").append(lineCategory);
     }
 
 
     function roundEnded(data) {
         let myScore = data.currentPlayers.filter(item => {
-            if(item.playerId == _player.playerId) return true;
+            if (item.playerId == _player.playerId) return true;
             return false;
         })[0].score;
 
@@ -197,8 +213,8 @@
         _players = data.players;
         updatePlayers();
 
-        _players.sort((a, b) => {return b.score-a.score});
-        
+        _players.sort((a, b) => { return b.score - a.score });
+
         let resultMatch = `<h4 style="padding-top: 20px;">Partida encerrada!</h4>`;
 
         _players.forEach(item => {
@@ -222,12 +238,12 @@
         let boxSize = _players.length < 2 ? 6 : Math.floor(12 / _players.length);
         let boxPlayers = "";
 
-        for (let i = 0; i < _players.length; i++){
+        for (let i = 0; i < _players.length; i++) {
             if (_players[i].playerId == _player.playerId) {
                 boxPlayers += `
                 <div class="col-md-` + boxSize + `" style="padding: 0;">
                     <div class="card text-white bg-info stop-player-card">
-                        <div class="card-header">` + _players[i].userName + `<span id="score-`+_players[i].playerId+`" class="player-score">Pontos: ` + _players[i].score + `</span></div>
+                        <div class="card-header">` + _players[i].userName + `<span id="score-` + _players[i].playerId + `" class="player-score">Pontos: ` + _players[i].score + `</span></div>
                         <div class="card-body">
                             <div class="text-center" href="#">
                                 <!--<img class="stop-btn-power" src="/assets/img/power-spin.png" alt="skill special stop" title="Usar poder stop." />-->

@@ -6,29 +6,52 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace stop_server.Hubs
 {
-    public class NotificationHub : Hub
+    public class GameHub : Hub
     {
-        private readonly ILogger<NotificationHub> _logger;
+        private readonly ILogger<GameHub> _logger;
 
         public override Task OnConnectedAsync()
         {
             return base.OnConnectedAsync();
         }
 
-        public NotificationHub(ILogger<NotificationHub> logger)
+        public GameHub(ILogger<GameHub> logger)
         {
             this._logger = logger;
         }
 
-        public async Task NotifyAll(Notification notification)
+        [HubMethodName("join_room")]
+        public async Task JoinRoom(JoinRoomRequest request)
         {
-            _logger.LogInformation("NotifyAll received: {0}", notification);
+            _logger.LogInformation("join_room received: {0}", request);
 
-            await Clients.All.SendAsync("NotificationReceived", notification);
+            await Clients.All.SendAsync("broadcast", request);
 
-            _logger.LogInformation("NotificationReceived sent: {0}", notification);
+            await Clients.Caller.SendAsync(
+                "room_found",
+                new RoomFoundEvent(
+                    Player: new RoomFoundEventPlayer(
+                        Username: "username_43"
+                    ),
+                    Room: new RoomFoundEventRoom(
+                        Name: "room_name_42",
+                        Status: "READY",
+                        Categories: new[]
+                        {
+                            new RoomFoundEventRoomCategory("category_42")
+                        }
+                    )
+                )
+            );
         }
     }
 
-    public record Notification(string Text);
+    public record JoinRoomRequest(string RoomId);
+
+    public record RoomFoundEvent(RoomFoundEventPlayer Player, RoomFoundEventRoom Room);
+
+    public record RoomFoundEventPlayer(string Username);
+
+    public record RoomFoundEventRoom(string Name, string Status, IReadOnlyCollection<RoomFoundEventRoomCategory> Categories);
+    public record RoomFoundEventRoomCategory(string Name);
 }

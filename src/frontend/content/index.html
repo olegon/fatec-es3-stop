@@ -28,21 +28,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.0/signalr.min.js" integrity="sha512-ZqjBuyHOJ5inr58y0trfRo8TgD0zC0WJROOUmgjAIA6iiqXxobgj3ZocloB2Wp9ov2+LB9UM09aiwI3MDpm5HA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
-        $(() => {
-            // testing signalR
-            const connection = new signalR.HubConnectionBuilder()
-                .withUrl("http://localhost:5240/notification")
-                .build();
-
-            connection.on("NotificationReceived", data => {
-                console.log(data);
-            });
-
-            connection.start()
-                .then(() => connection.invoke("NotifyAll", {
-                    text: "test"
-                }));
-        })
+        
     </script>
 </body>
 </html>

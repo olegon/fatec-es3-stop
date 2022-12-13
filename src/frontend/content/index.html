@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Stop</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
     <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet'>
 </head>
 <body>
@@ -18,13 +18,31 @@
                 Stop é um jogo muito comum entre as crianças e até mesmo entre adultos, cada coluna recebe o nome de uma categoria de palavras como animais, automóveis, nomes, cores etc., e cada linha representa uma rodada do jogo.
             </div>
         </div>
-        <a type="button" class="btn btn-success btn-lg" style="font-size: 2em;" href="./new-game">Criar nova sala</a>
-        <a type="button" class="btn btn-primary btn-lg" style="font-size: 2em;" href="./rooms">Entrar em sala</a>
+        <a type="button" class="btn btn-success btn-lg" style="font-size: 2em;" href="/new-game">Criar nova sala</a>
+        <a type="button" class="btn btn-primary btn-lg" style="font-size: 2em;" href="/rooms">Entrar em sala</a>
     </div>
     <div class="footer"></div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.0/signalr.min.js" integrity="sha512-ZqjBuyHOJ5inr58y0trfRo8TgD0zC0WJROOUmgjAIA6iiqXxobgj3ZocloB2Wp9ov2+LB9UM09aiwI3MDpm5HA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $(() => {
+            // testing signalR
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("http://localhost:5240/notification")
+                .build();
+
+            connection.on("NotificationReceived", data => {
+                console.log(data);
+            });
+
+            connection.start()
+                .then(() => connection.invoke("NotifyAll", {
+                    text: "test"
+                }));
+        })
+    </script>
 </body>
 </html>

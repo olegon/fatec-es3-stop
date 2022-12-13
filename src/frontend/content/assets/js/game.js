@@ -188,7 +188,7 @@
     function roomNotActive(data) {
         $("#game-message").html(`
         <h2 style="padding-top: 20px; color:black;" class="title">Infelizmente a partida acabou!</h2>
-        <img src="/public/img/emoji-triste.png" style="width: 30vh; padding-top: 20px;" />`);
+        <img src="/assets/img/emoji-triste.png" style="width: 30vh; padding-top: 20px;" />`);
         $("#game-message").show();
         $("#match").hide();
     }
@@ -213,7 +213,7 @@
     function roomNotFound() {
         $("#game-message").html(`
             <h2 style="padding-top: 20px;" class="title">Sala não encontrada</h2>
-            <img src="/public/img/page_not_found.gif" style="width: 65vh" alt="not found" title="Sala não encontrada." />`);
+            <img src="/assets/img/page_not_found.gif" style="width: 65vh" alt="not found" title="Sala não encontrada." />`);
         $("#game-message").show();
         $("#match").hide();
     }
@@ -230,7 +230,7 @@
                         <div class="card-header">` + _players[i].userName + `<span id="score-`+_players[i].playerId+`" class="player-score">Pontos: ` + _players[i].score + `</span></div>
                         <div class="card-body">
                             <div class="text-center" href="#">
-                                <!--<img class="stop-btn-power" src="/public/img/power-spin.png" alt="skill special stop" title="Usar poder stop." />-->
+                                <!--<img class="stop-btn-power" src="/assets/img/power-spin.png" alt="skill special stop" title="Usar poder stop." />-->
                             </div>
                         </div>
                     </div>
@@ -243,13 +243,13 @@
                         <div class="card-body">
                             <div class="text-center" style="display: ${_player.canCastFrostPlayer ? 'inline' : 'none'};">
                                 <a href="#" data-power="frozen" data-target="` + _players[i].playerId + `">
-                                    <img class="stop-btn-power" src="/public/img/power-freeze.png" alt="skill freeze enemy" title="Congelar jogador." />
+                                    <img class="stop-btn-power" src="/assets/img/power-freeze.png" alt="skill freeze enemy" title="Congelar jogador." />
                                 </a>
                             </div>
 
                             <div class="text-center" style="display: ${_player.canCastConfusePlayer ? 'inline' : 'none'};">
                                 <a href="#" data-power="confusion" data-target="` + _players[i].playerId + `">
-                                    <img class="stop-btn-power" src="/public/img/power-spin.png" alt="skill confuse enemy" title="Confundir jogador." />
+                                    <img class="stop-btn-power" src="/assets/img/power-spin.png" alt="skill confuse enemy" title="Confundir jogador." />
                                 </a>
                             </div>
                         </div>

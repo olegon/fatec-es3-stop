@@ -4,14 +4,23 @@ services:
   mongo-instance:
     image: mongo
     volumes:
-      - "/opt/docker-volumes/stop-online/mongo/data/db:/data/db"
-  stop:
-    image: fatec-node-es3
-    build: .
-    environment:
-      MONGO_CONNECTIONSTRING: mongodb://mongo-instance:27017/nodestop
-      PORT: 3000
+      - "/tmp/docker-volumes/stop-online/mongo/data/db:/data/db"
     ports:
-      - 3000:3000
-    depends_on: 
-      - mongo-instance
+      - 27017:27017
+  nginx-instance:
+    image: nginx
+    volumes:
+      - ./frontend/content:/usr/share/nginx/html:ro
+      - ./frontend/nginx/conf.d:/etc/nginx/conf.d:ro
+    ports:
+      - 8080:80
+  # stop:
+  #   image: fatec-node-es3
+  #   build: .
+  #   environment:
+  #     MONGO_CONNECTIONSTRING: mongodb://mongo-instance:27017/nodestop
+  #     PORT: 3000
+  #   ports:
+  #     - 3000:3000
+  #   depends_on: 
+  #     - mongo-instance

@@ -39,7 +39,7 @@
             const $roomName = $('#room-name');
             const $select = $('.multiple-select');
 
-            $.getJSON('/api/category')
+            $.getJSON('http://localhost:5240/api/category')
             .done(function (categories) {
                 categories.forEach(function (category) {
                     const $template = $('<option value=""></option>');
@@ -68,7 +68,7 @@
 
                 $.ajax({
                     method: 'POST',
-                    url: '/api/rooms',
+                    url: 'http://localhost:5240/api/rooms',
                     contentType: 'application/json',
                     data:  JSON.stringify({
                         name: $roomName.val(),

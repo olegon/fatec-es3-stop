@@ -1,8 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+using stop_server.Entities;
 using stop_server.Hubs;
+using stop_server.Models.API.Legacy;
+using stop_server.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<StopDbContext>(options =>
+{
+    options.UseNpgsql("Host=localhost;Username=abcdef;Password=123456;Database=stop");
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -30,11 +38,54 @@ if (app.Environment.IsDevelopment())
 
 app.MapHub<GameHub>("/game-hub");
 
-app.MapGet("/rooms", () =>
+app.MapGet("/api/category", async (StopDbContext context) =>
 {
-    var result = Random.Shared.NextInt64();
-    return result;
+    var categories = await context.Categories
+        .ToArrayAsync();
+
+    return categories.Select(category => new GetCategoryResponse(
+        Id: category.ExternalId,
+        Name: category.Name
+    ));
 })
-.WithName("GetWeatherForecast");
+.WithName("Get Categories (legacy)");
+
+app.MapGet("/api/rooms", async (StopDbContext context) =>
+{
+    var rooms = await context.Rooms
+        .Include(room => room.Categories)
+        .ToArrayAsync();
+
+    return rooms.Select(room => new GetRoomResponse(
+            Id: room.ExternalId,
+            Name: room.Name,
+            Categories: room.Categories.Select(category => new GetRoomResponseCategory(
+                Id: category.ExternalId,
+                Name: category.Name
+            ))
+        ));
+})
+.WithName("Get Rooms (legacy)");
+
+app.MapPost("/api/rooms", async (StopDbContext context, CreateRoomRequest request) =>
+{
+    var categories = await context.Categories
+        .Where(category => request.Categories.Contains(category.ExternalId))
+        .ToArrayAsync();
+
+    var room = new Room()
+    {
+        ExternalId = Guid.NewGuid().ToString(),
+        Name = request.Name,
+        Status = "CREATED",
+        Categories = categories
+    };
+
+    context.Rooms.Add(room);
+    await context.SaveChangesAsync();
+
+    return new CreateRoomResponse(room.ExternalId);
+})
+.WithName("Create Room (legacy)");
 
 app.Run();

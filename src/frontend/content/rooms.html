@@ -43,7 +43,7 @@
             }
             $(function () {
                 const $roomsContainer  = $('#server-rooms');
-                $.getJSON('/api/rooms')
+                $.getJSON('http://localhost:5240/api/rooms')
                 .done(function (rooms) {
                     rooms.forEach(function (room) {
                         var $roomTemplate = createTemplate();

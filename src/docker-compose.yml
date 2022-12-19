@@ -1,19 +1,32 @@
-version: '3'
+version: "3"
 
 services:
-  mongo-instance:
-    image: mongo
-    volumes:
-      - "/tmp/docker-volumes/stop-online/mongo/data/db:/data/db"
-    ports:
-      - 27017:27017
-  nginx-instance:
+  # mongo:
+  #   image: mongo
+  #   ports:
+  #     - 27017:27017
+  #   volumes:
+  #     - /tmp/stop-online/docker-volumes/mongo/data/db:/data/db:rw
+
+  nginx:
     image: nginx
     volumes:
       - ./frontend/content:/usr/share/nginx/html:ro
       - ./frontend/nginx/conf.d:/etc/nginx/conf.d:ro
     ports:
       - 8080:80
+
+  postgres:
+    image: postgres
+    ports:
+      - 5432:5432
+    # volumes:
+    #   - /tmp/stop-online/docker-volumes/postgres/data:/var/lib/postgresql/data:rw
+    environment:
+      POSTGRES_USER: abcdef
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: stop
+
   # stop:
   #   image: fatec-node-es3
   #   build: .

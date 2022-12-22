@@ -14,11 +14,6 @@ namespace stop_server.Hubs
         private readonly ILogger<GameHub> _logger;
         private readonly StopDbContext _stopDbContext;
 
-        public override Task OnConnectedAsync()
-        {
-            return base.OnConnectedAsync();
-        }
-
         public GameHub(ILogger<GameHub> logger, StopDbContext stopDbContext)
         {
             this._logger = logger;
@@ -43,6 +38,8 @@ namespace stop_server.Hubs
             }
             else
             {
+                await this.Groups.AddToGroupAsync(this.Context.ConnectionId, room.ExternalId);
+
                 await Clients.Caller.SendAsync(
                     room.Name,
                     new RoomFoundEvent(
